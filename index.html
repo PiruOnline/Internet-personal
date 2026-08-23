@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Planes de Internet para Personal Argentina — CGLite y HTTP Custom.">
+<meta name="theme-color" content="#070a0f">
+<title>PersonalNet | Internet Personal Argentina</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="#">PERSONAL<span>NET</span></a>
+  <a class="navlink" href="#planes">Planes</a>
+</header>
+
+<main>
+<section class="hero">
+  <div class="pill">🇦🇷 PERSONAL ARGENTINA</div>
+  <h1>Internet para<br><span>Personal.</span></h1>
+  <p>Elegí tu servicio, completá tus datos y realizá el pago. Después enviá tu comprobante por WhatsApp para recibir tu contratación.</p>
+  <a class="cta" href="#planes">Ver planes <b>↓</b></a>
+  <small>Servicio independiente. La disponibilidad depende de la compatibilidad y condiciones de la red.</small>
+</section>
+
+<section id="planes" class="section">
+  <div class="heading">
+    <label>01 / SERVICIOS</label>
+    <h2>Elegí tu plan</h2>
+  </div>
+
+  <div class="service">
+    <div class="service-head">
+      <div><span class="service-dot green"></span><strong>CGLite</strong><p>Sin saldo</p></div>
+      <em>RECOMENDADO</em>
+    </div>
+    <div class="grid three">
+      <article class="plan">
+        <span>7 DÍAS</span><strong>$4.500</strong>
+        <button onclick="buy('CGLite — 7 días',4500)">Contratar</button>
+      </article>
+      <article class="plan">
+        <span>15 DÍAS</span><strong>$6.000</strong>
+        <button onclick="buy('CGLite — 15 días',6000)">Contratar</button>
+      </article>
+      <article class="plan highlight">
+        <span>30 DÍAS</span><strong>$8.000</strong>
+        <button onclick="buy('CGLite — 30 días',8000)">Contratar</button>
+      </article>
+    </div>
+  </div>
+
+  <div class="service">
+    <div class="service-head">
+      <div><span class="service-dot yellow"></span><strong>HTTP Custom</strong><p>Planes con diferentes cantidades de dispositivos</p></div>
+      <em class="offer">OFERTA</em>
+    </div>
+    <div class="grid four">
+      <article class="plan">
+        <span>7 DÍAS</span><del>$3.500</del><strong>$3.000</strong>
+        <button onclick="buy('HTTP Custom — 7 días — Oferta',3000)">Contratar</button>
+      </article>
+      <article class="plan">
+        <span>30 DÍAS · 1 DISPOSITIVO</span><del>$7.000</del><strong>$6.500</strong>
+        <button onclick="buy('HTTP Custom — 30 días — 1 dispositivo — Oferta',6500)">Contratar</button>
+      </article>
+      <article class="plan">
+        <span>30 DÍAS · 2 DISPOSITIVOS</span><del>$12.500</del><strong>$11.500</strong>
+        <button onclick="buy('HTTP Custom — 30 días — 2 dispositivos — Oferta',11500)">Contratar</button>
+      </article>
+      <article class="plan">
+        <span>30 DÍAS · 5 DISPOSITIVOS</span><del>$21.500</del><strong>$19.500</strong>
+        <button onclick="buy('HTTP Custom — 30 días — 5 dispositivos — Oferta',19500)">Contratar</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div><b>01</b><h3>Elegí</h3><p>Seleccioná CGLite o HTTP Custom.</p></div>
+  <div><b>02</b><h3>Pagá</h3><p>Realizá el pago desde Mercado Pago.</p></div>
+  <div><b>03</b><h3>Confirmá</h3><p>Enviá el comprobante por WhatsApp.</p></div>
+</section>
+
+<section class="info">
+  <label>02 / INFORMACIÓN</label>
+  <h2>¿Cómo funciona?</h2>
+  <p>Al contratar se abrirá Mercado Pago para que puedas realizar el pago. Una vez realizado, volvé a esta página y utilizá el botón de WhatsApp para enviarnos tus datos y comprobante.</p>
+  <p class="warning">Los servicios están sujetos a compatibilidad, cobertura y condiciones de la red de Personal Argentina. No se garantiza funcionamiento permanente ante cambios realizados por el operador.</p>
+</section>
+</main>
+
+<footer>
+  <div class="logo">PERSONAL<span>NET</span></div>
+  <span>© 2026 · Servicio independiente</span>
+</footer>
+
+<div id="modal" class="overlay hidden">
+  <div class="modal">
+    <button class="x" onclick="closeModal()">×</button>
+    <label>CONTRATACIÓN</label>
+    <h2 id="modalTitle">Plan</h2>
+    <div class="price" id="modalPrice">$0</div>
+
+    <form id="form">
+      <input id="customerName" required minlength="2" placeholder="Tu nombre">
+      <input id="customerPhone" required inputmode="tel" placeholder="Tu WhatsApp (ej. 11 1234 5678)">
+      <button class="cta full" type="submit">Continuar al pago</button>
+    </form>
+    <p class="hint">Después del pago podrás enviar el comprobante por WhatsApp.</p>
+    <div id="err" class="error"></div>
+  </div>
+</div>
+
+<script>
+const MP_LINK = "https://link.mercadopago.com.ar/REEMPLAZAR";
+const ADMIN_WHATSAPP = "54911XXXXXXXX";
+let selected = {};
+
+function money(n){return "$"+n.toLocaleString("es-AR");}
+
+function buy(name, price){
+  selected={name,price};
+  document.getElementById("modalTitle").textContent=name;
+  document.getElementById("modalPrice").textContent=money(price);
+  document.getElementById("err").textContent="";
+  document.getElementById("modal").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+}
+function closeModal(){
+  document.getElementById("modal").classList.add("hidden");
+  document.body.style.overflow="";
+}
+document.getElementById("modal").addEventListener("click",e=>{
+  if(e.target.id==="modal") closeModal();
+});
+
+document.getElementById("form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("customerName").value.trim();
+  const phone=document.getElementById("customerPhone").value.trim();
+  if(!MP_LINK.includes("link.mercadopago.com.ar/") || MP_LINK.includes("REEMPLAZAR")){
+    document.getElementById("err").textContent="Primero configurá tu link de pago de Mercado Pago en index.html.";
+    return;
+  }
+  const message =
+`🛒 NUEVA CONTRATACIÓN
+
+👤 Cliente: ${name}
+📱 WhatsApp: ${phone}
+📦 Servicio: ${selected.name}
+💰 Total: ${money(selected.price)}
+
+✅ Voy a enviar el comprobante de pago.`;
+  const wa=`https://wa.me/${ADMIN_WHATSAPP.replace(/\D/g,"")}?text=${encodeURIComponent(message)}`;
+  sessionStorage.setItem("orderMessage",message);
+  sessionStorage.setItem("orderWA",wa);
+  window.open(MP_LINK,"_blank");
+  closeModal();
+  setTimeout(()=>showAfterPay(),500);
+});
+
+function showAfterPay(){
+  const old=document.getElementById("after");
+  if(old) old.remove();
+  const box=document.createElement("div");
+  box.id="after"; box.className="after";
+  box.innerHTML=`
+    <div class="afterbox">
+      <div class="check">✓</div>
+      <label>PAGO</label>
+      <h2>¿Ya realizaste el pago?</h2>
+      <p>Cuando termines en Mercado Pago, enviá el comprobante por WhatsApp para que podamos procesar tu contratación.</p>
+      <a class="cta full" href="${sessionStorage.getItem("orderWA")}" target="_blank">Enviar por WhatsApp</a>
+      <button class="secondary" onclick="document.getElementById('after').remove()">Cerrar</button>
+    </div>`;
+  document.body.appendChild(box);
+}
+</script>
+</body>
+</html>
