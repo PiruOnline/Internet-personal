@@ -1,23 +1,22 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="description" content="Internet ilimitado para Personal y Claro Argentina. CGLite y HTTP Custom.">
+  <meta
+    name="description"
+    content="Internet ilimitado para Personal y Claro Argentina. CGLite y HTTP Custom."
+  >
 
-<meta name="theme-color" content="#070a0f">
+  <meta name="theme-color" content="#06080c">
 
-<title>PERSONALNET | Internet Argentina</title>
+  <title>PERSONALNET | Internet Argentina</title>
 
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-<!-- =========================
-     NAVBAR
-========================= -->
 
 <header class="nav">
 
@@ -31,9 +30,8 @@
       Ver planes
     </a>
 
-    <button class="cart-button" onclick="openCart()">
-      <span>🛒</span>
-      <span>Carrito</span>
+    <button class="cart-button" id="openCart">
+      🛒 <span>Carrito</span>
       <b id="cartCount">0</b>
     </button>
 
@@ -44,663 +42,681 @@
 
 <main>
 
-<!-- =========================
-     HERO
-========================= -->
+  <!-- HERO -->
 
-<section class="hero">
+  <section class="hero">
 
-  <div class="hero-pill">
-    <span></span>
-    PERSONAL & CLARO ARGENTINA
-  </div>
-
-  <h1>
-    Internet
-    <br>
-    <em>sin límites.</em>
-  </h1>
-
-  <p>
-    Elegí el servicio que necesitás, probalo antes de contratar
-    y disfrutá de una experiencia rápida y sencilla.
-  </p>
-
-  <a href="#planes" class="hero-button">
-    Ver servicios
-    <span>↓</span>
-  </a>
-
-  <div class="hero-note">
-    Servicio independiente · Consultá compatibilidad antes de contratar.
-  </div>
-
-</section>
-
-
-<!-- =========================
-     SERVICIOS
-========================= -->
-
-<section class="services-section" id="planes">
-
-  <div class="section-header">
-
-    <div>
-      <label>01 / SERVICIOS</label>
-      <h2>Elegí tu servicio</h2>
+    <div class="pill">
+      🇦🇷 PERSONAL & CLARO ARGENTINA
     </div>
 
-    <span class="service-counter">
-      3 servicios disponibles
-    </span>
+    <h1>
+      Internet<br>
+      <span>sin límites.</span>
+    </h1>
 
-  </div>
+    <p>
+      Elegí el servicio que necesitás, pedí una prueba para comprobar
+      compatibilidad y contratá de forma rápida y sencilla.
+    </p>
+
+    <a class="cta hero-cta" href="#planes">
+      Ver servicios
+      <b>↓</b>
+    </a>
+
+    <div class="hero-note">
+      Servicio independiente · Consultá compatibilidad antes de contratar.
+    </div>
+
+  </section>
 
 
-  <!-- =====================
-       CGLITE PERSONAL
-  ====================== -->
+  <!-- PLANES -->
 
-  <div class="service">
+  <section id="planes" class="section">
 
-    <div class="service-header">
+    <div class="section-title">
 
-      <div class="service-name">
-
-        <div class="service-icon personal">
-          C
-        </div>
-
-        <div>
-          <h3>CGLite Personal</h3>
-          <p>Internet ilimitado para Personal Argentina</p>
-        </div>
-
+      <div>
+        <label>01 / SERVICIOS</label>
+        <h2>Elegí tu servicio</h2>
       </div>
 
-      <span class="operator personal-tag">
-        PERSONAL
+      <span class="section-count">
+        3 servicios
       </span>
 
     </div>
 
 
-    <div class="plans-grid">
+    <!-- CGLITE PERSONAL -->
 
-      <article class="plan-card">
+    <div class="service">
 
-        <div class="plan-content">
+      <div class="service-head">
 
-          <span class="duration">
-            7 DÍAS
-          </span>
+        <div class="service-title">
+
+          <span class="service-dot green"></span>
+
+          <div>
+            <strong>CGLite Personal</strong>
+            <p>
+              Internet ilimitado para Personal Argentina
+            </p>
+          </div>
+
+        </div>
+
+        <span class="service-tag">
+          PERSONAL
+        </span>
+
+      </div>
+
+
+      <div class="grid three">
+
+        <article class="plan">
+
+          <div class="plan-top">
+            <span>7 DÍAS</span>
+          </div>
 
           <strong class="price">
             $4.500
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Personal — 7 días', 4500)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button"
-          onclick="addToCart('CGLite Personal — 7 días',4500)">
-          Agregar al carrito
-        </button>
-
-      </article>
+        </article>
 
 
-      <article class="plan-card">
+        <article class="plan">
 
-        <div class="plan-content">
-
-          <span class="duration">
-            15 DÍAS
-          </span>
+          <div class="plan-top">
+            <span>15 DÍAS</span>
+          </div>
 
           <strong class="price">
             $6.000
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Personal — 15 días', 6000)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button"
-          onclick="addToCart('CGLite Personal — 15 días',6000)">
-          Agregar al carrito
-        </button>
-
-      </article>
+        </article>
 
 
-      <article class="plan-card recommended">
+        <article class="plan recommended">
 
-        <div class="recommended-badge">
-          RECOMENDADO
-        </div>
+          <div class="badge">
+            RECOMENDADO
+          </div>
 
-        <div class="plan-content">
-
-          <span class="duration">
-            30 DÍAS
-          </span>
+          <div class="plan-top">
+            <span>30 DÍAS</span>
+          </div>
 
           <strong class="price">
             $8.000
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Personal — 30 días', 8000)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button primary"
-          onclick="addToCart('CGLite Personal — 30 días',8000)">
-          Agregar al carrito
-        </button>
-
-      </article>
-
-    </div>
-
-
-    <div class="service-tools">
-
-      <button
-        class="test-button"
-        onclick="requestTest('CGLite Personal')">
-        🧪 Pedir prueba
-      </button>
-
-      <a
-        class="download-button"
-        href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
-        target="_blank"
-        rel="noopener">
-        📥 Descargar CGLite
-      </a>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================
-       CGLITE CLARO
-  ====================== -->
-
-  <div class="service">
-
-    <div class="service-header">
-
-      <div class="service-name">
-
-        <div class="service-icon claro">
-          C
-        </div>
-
-        <div>
-          <h3>CGLite Claro</h3>
-          <p>Internet ilimitado para Claro Argentina</p>
-        </div>
+        </article>
 
       </div>
 
-      <span class="operator claro-tag">
-        CLARO
-      </span>
+
+      <div class="service-actions">
+
+        <button
+          class="trial-btn"
+          onclick="requestTrial('CGLite Personal')">
+          🧪 Pedir prueba
+        </button>
+
+        <a
+          class="download-btn"
+          href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
+          target="_blank"
+          rel="noopener">
+          📥 Descargar CGLite
+        </a>
+
+      </div>
 
     </div>
 
 
-    <div class="plans-grid">
 
-      <article class="plan-card">
+    <!-- CGLITE CLARO -->
 
-        <div class="plan-content">
+    <div class="service">
 
-          <span class="duration">
-            7 DÍAS
-          </span>
+      <div class="service-head">
+
+        <div class="service-title">
+
+          <span class="service-dot red"></span>
+
+          <div>
+            <strong>CGLite Claro</strong>
+            <p>
+              Internet ilimitado para Claro Argentina
+            </p>
+          </div>
+
+        </div>
+
+        <span class="service-tag claro">
+          CLARO
+        </span>
+
+      </div>
+
+
+      <div class="grid three">
+
+        <article class="plan">
+
+          <div class="plan-top">
+            <span>7 DÍAS</span>
+          </div>
 
           <strong class="price">
             $4.500
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Claro — 7 días', 4500)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button"
-          onclick="addToCart('CGLite Claro — 7 días',4500)">
-          Agregar al carrito
-        </button>
-
-      </article>
+        </article>
 
 
-      <article class="plan-card">
+        <article class="plan">
 
-        <div class="plan-content">
-
-          <span class="duration">
-            15 DÍAS
-          </span>
+          <div class="plan-top">
+            <span>15 DÍAS</span>
+          </div>
 
           <strong class="price">
             $6.000
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Claro — 15 días', 6000)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button"
-          onclick="addToCart('CGLite Claro — 15 días',6000)">
-          Agregar al carrito
-        </button>
-
-      </article>
+        </article>
 
 
-      <article class="plan-card recommended">
+        <article class="plan recommended">
 
-        <div class="recommended-badge">
-          RECOMENDADO
-        </div>
+          <div class="badge">
+            RECOMENDADO
+          </div>
 
-        <div class="plan-content">
-
-          <span class="duration">
-            30 DÍAS
-          </span>
+          <div class="plan-top">
+            <span>30 DÍAS</span>
+          </div>
 
           <strong class="price">
             $8.000
           </strong>
 
-        </div>
+          <button
+            onclick="addToCart('CGLite Claro — 30 días', 8000)">
+            🛒 Agregar al carrito
+          </button>
 
-        <button
-          class="add-button primary"
-          onclick="addToCart('CGLite Claro — 30 días',8000)">
-          Agregar al carrito
-        </button>
-
-      </article>
-
-    </div>
-
-
-    <div class="service-tools">
-
-      <button
-        class="test-button"
-        onclick="requestTest('CGLite Claro')">
-        🧪 Pedir prueba
-      </button>
-
-      <a
-        class="download-button"
-        href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
-        target="_blank"
-        rel="noopener">
-        📥 Descargar CGLite
-      </a>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================
-       HTTP CUSTOM
-  ====================== -->
-
-  <div class="service">
-
-    <div class="service-header">
-
-      <div class="service-name">
-
-        <div class="service-icon http">
-          H
-        </div>
-
-        <div>
-          <h3>HTTP Custom</h3>
-          <p>Internet ilimitado según cantidad de dispositivos</p>
-        </div>
+        </article>
 
       </div>
 
-      <span class="operator offer-tag">
-        OFERTA
-      </span>
+
+      <div class="service-actions">
+
+        <button
+          class="trial-btn"
+          onclick="requestTrial('CGLite Claro')">
+          🧪 Pedir prueba
+        </button>
+
+        <a
+          class="download-btn"
+          href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
+          target="_blank"
+          rel="noopener">
+          📥 Descargar CGLite
+        </a>
+
+      </div>
 
     </div>
 
 
-    <div class="plans-grid">
+
+    <!-- HTTP CUSTOM -->
+
+    <div class="service">
+
+      <div class="service-head">
+
+        <div class="service-title">
+
+          <span class="service-dot yellow"></span>
+
+          <div>
+            <strong>HTTP Custom</strong>
+            <p>
+              Elegí según la cantidad de dispositivos
+            </p>
+          </div>
+
+        </div>
+
+        <span class="service-tag offer">
+          OFERTA
+        </span>
+
+      </div>
+
 
       <!-- 7 DÍAS -->
 
-      <article class="plan-card offer-card">
+      <article class="special-offer">
 
-        <div class="offer-label">
-          OFERTA
-        </div>
+        <div>
 
-        <div class="plan-content">
-
-          <span class="duration">
-            7 DÍAS
+          <span class="offer-label">
+            🔥 OFERTA ESPECIAL
           </span>
 
-          <div class="old-price">
-            $4.500
-          </div>
+          <h3>
+            HTTP Custom — 7 días
+          </h3>
 
-          <strong class="price offer-price">
+          <p>
+            1 dispositivo
+          </p>
+
+        </div>
+
+        <div class="offer-price">
+
+          <del>$4.500</del>
+
+          <strong>
             $3.500
           </strong>
 
         </div>
 
         <button
-          class="add-button primary"
-          onclick="addToCart('HTTP Custom — 7 días — Oferta',3500)">
-          Agregar al carrito
+          onclick="addToCart('HTTP Custom — 7 días — 1 dispositivo — OFERTA', 3500)">
+          🛒 Agregar al carrito
         </button>
 
       </article>
 
 
-      <!-- 30 DÍAS / 1 -->
+      <!-- 30 DÍAS -->
 
-      <article class="plan-card">
+      <div class="subheading">
+        Planes de 30 días
+      </div>
 
-        <div class="plan-content">
 
-          <span class="duration">
-            30 DÍAS
-          </span>
+      <div class="grid three">
 
-          <small class="devices">
-            1 DISPOSITIVO
-          </small>
 
-          <strong class="price">
-            $7.000
-          </strong>
+        <!-- 1 DISPOSITIVO -->
 
-        </div>
+        <article class="plan">
+
+          <div class="plan-top">
+
+            <span>
+              30 DÍAS
+            </span>
+
+            <small>
+              1 DISPOSITIVO
+            </small>
+
+          </div>
+
+          <div class="price-box">
+
+            <del>$7.500</del>
+
+            <strong class="price">
+              $7.000
+            </strong>
+
+          </div>
+
+          <button
+            onclick="addToCart('HTTP Custom — 30 días — 1 dispositivo', 7000)">
+            🛒 Agregar al carrito
+          </button>
+
+        </article>
+
+
+        <!-- 2 DISPOSITIVOS -->
+
+        <article class="plan best">
+
+          <div class="badge best-badge">
+            🔥 MÁS VENDIDO
+          </div>
+
+          <div class="plan-top">
+
+            <span>
+              30 DÍAS
+            </span>
+
+            <small>
+              2 DISPOSITIVOS
+            </small>
+
+          </div>
+
+          <div class="price-box">
+
+            <del>$13.500</del>
+
+            <strong class="price">
+              $12.000
+            </strong>
+
+          </div>
+
+          <button
+            onclick="addToCart('HTTP Custom — 30 días — 2 dispositivos', 12000)">
+            🛒 Agregar al carrito
+          </button>
+
+        </article>
+
+
+        <!-- 5 DISPOSITIVOS -->
+
+        <article class="plan">
+
+          <div class="plan-top">
+
+            <span>
+              30 DÍAS
+            </span>
+
+            <small>
+              5 DISPOSITIVOS
+            </small>
+
+          </div>
+
+          <div class="price-box">
+
+            <del>$22.500</del>
+
+            <strong class="price">
+              $20.000
+            </strong>
+
+          </div>
+
+          <button
+            onclick="addToCart('HTTP Custom — 30 días — 5 dispositivos', 20000)">
+            🛒 Agregar al carrito
+          </button>
+
+        </article>
+
+      </div>
+
+
+      <div class="service-actions">
 
         <button
-          class="add-button"
-          onclick="addToCart('HTTP Custom — 30 días — 1 dispositivo',7000)">
-          Agregar al carrito
+          class="trial-btn"
+          onclick="requestTrial('HTTP Custom')">
+          🧪 Pedir prueba
         </button>
 
-      </article>
+        <a
+          class="download-btn"
+          href="https://play.google.com/store/apps/details?id=xyz.easypro.httpcustom"
+          target="_blank"
+          rel="noopener">
+          ▶️ Descargar desde Google Play
+        </a>
 
-
-      <!-- 30 DÍAS / 2 -->
-
-      <article class="plan-card best">
-
-        <div class="best-badge">
-          🔥 MÁS VENDIDO
-        </div>
-
-        <div class="plan-content">
-
-          <span class="duration">
-            30 DÍAS
-          </span>
-
-          <small class="devices">
-            2 DISPOSITIVOS
-          </small>
-
-          <strong class="price">
-            $12.000
-          </strong>
-
-        </div>
-
-        <button
-          class="add-button primary"
-          onclick="addToCart('HTTP Custom — 30 días — 2 dispositivos',12000)">
-          Agregar al carrito
-        </button>
-
-      </article>
-
-
-      <!-- 30 DÍAS / 5 -->
-
-      <article class="plan-card">
-
-        <div class="plan-content">
-
-          <span class="duration">
-            30 DÍAS
-          </span>
-
-          <small class="devices">
-            5 DISPOSITIVOS
-          </small>
-
-          <strong class="price">
-            $20.000
-          </strong>
-
-        </div>
-
-        <button
-          class="add-button"
-          onclick="addToCart('HTTP Custom — 30 días — 5 dispositivos',20000)">
-          Agregar al carrito
-        </button>
-
-      </article>
-
-    </div>
-
-
-    <div class="service-tools">
-
-      <button
-        class="test-button"
-        onclick="requestTest('HTTP Custom')">
-        🧪 Pedir prueba
-      </button>
-
-      <a
-        class="download-button"
-        href="https://play.google.com/store/apps/details?id=xyz.easypro.httpcustom"
-        target="_blank"
-        rel="noopener">
-        ▶️ Descargar desde Google Play
-      </a>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     PROCESO
-========================= -->
-
-<section class="process-section">
-
-  <div class="section-heading">
-
-    <label>02 / PROCESO</label>
-
-    <h2>Simple y directo.</h2>
-
-  </div>
-
-
-  <div class="process-grid">
-
-    <div class="process-card">
-      <span>01</span>
-      <div>
-        <h3>Elegí</h3>
-        <p>
-          Seleccioná el servicio y la duración que necesitás.
-        </p>
       </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- COMO FUNCIONA -->
+
+  <section class="steps-section">
+
+    <div class="section-heading">
+
+      <label>02 / PROCESO</label>
+
+      <h2>
+        ¿Cómo funciona?
+      </h2>
+
     </div>
 
 
-    <div class="process-card">
-      <span>02</span>
-      <div>
-        <h3>Probá</h3>
-        <p>
-          Pedí una prueba antes de contratar para comprobar compatibilidad.
-        </p>
-      </div>
-    </div>
+    <div class="steps">
 
+      <div class="step">
 
-    <div class="process-card">
-      <span>03</span>
-      <div>
-        <h3>Contratá</h3>
-        <p>
-          Agregá tu plan al carrito, completá tus datos y realizá el pago.
-        </p>
-      </div>
-    </div>
-
-
-    <div class="process-card">
-      <span>04</span>
-      <div>
-        <h3>Confirmá</h3>
-        <p>
-          Enviá el comprobante por WhatsApp y procesamos tu contratación.
-        </p>
-      </div>
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     INFORMACIÓN
-========================= -->
-
-<section class="info-section">
-
-  <label>03 / INFORMACIÓN</label>
-
-  <h2>Antes de contratar</h2>
-
-  <p>
-    Los servicios son independientes y están sujetos a compatibilidad,
-    cobertura y condiciones de la red correspondiente.
-  </p>
-
-  <div class="info-warning">
-
-    <span>!</span>
-
-    <p>
-      Recomendamos solicitar una prueba antes de contratar.
-      El funcionamiento puede verse afectado por cambios realizados
-      por el operador o por incompatibilidades del dispositivo.
-    </p>
-
-  </div>
-
-</section>
-
-
-
-<!-- =========================
-     CONTACTO
-========================= -->
-
-<section class="contact-section">
-
-  <div class="contact-inner">
-
-    <label>04 / CONTACTO</label>
-
-    <h2>¿Necesitás ayuda?</h2>
-
-    <p>
-      Consultas, pruebas, pagos y comprobantes.
-    </p>
-
-
-    <div class="contact-grid">
-
-      <a
-        class="contact-card"
-        href="https://wa.me/5493844546841"
-        target="_blank"
-        rel="noopener">
-
-        <span>🟢</span>
+        <span>01</span>
 
         <div>
-          <strong>WhatsApp</strong>
-          <small>Consultas y contratación</small>
+          <h3>Probá</h3>
+
+          <p>
+            Pedí una prueba antes de contratar para comprobar
+            que el servicio funciona correctamente en tu dispositivo.
+          </p>
         </div>
 
-        <b>→</b>
-
-      </a>
+      </div>
 
 
-      <a
-        class="contact-card"
-        href="https://www.instagram.com/cergio.oficial__/"
-        target="_blank"
-        rel="noopener">
+      <div class="step">
 
-        <span>📸</span>
+        <span>02</span>
 
         <div>
-          <strong>Instagram</strong>
-          <small>@cergio.oficial__</small>
+          <h3>Elegí</h3>
+
+          <p>
+            Seleccioná el servicio y la duración que necesitás.
+          </p>
         </div>
 
-        <b>→</b>
+      </div>
 
-      </a>
+
+      <div class="step">
+
+        <span>03</span>
+
+        <div>
+          <h3>Pagá</h3>
+
+          <p>
+            Agregá tu servicio al carrito y realizá el pago
+            mediante Mercado Pago.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="step">
+
+        <span>04</span>
+
+        <div>
+          <h3>Confirmá</h3>
+
+          <p>
+            Enviá el comprobante por WhatsApp para procesar
+            tu contratación.
+          </p>
+        </div>
+
+      </div>
 
     </div>
 
-  </div>
+  </section>
 
-</section>
+
+
+  <!-- INFORMACIÓN -->
+
+  <section class="info">
+
+    <label>
+      03 / INFORMACIÓN
+    </label>
+
+    <h2>
+      Antes de contratar
+    </h2>
+
+    <p>
+      Recomendamos solicitar una prueba antes de contratar
+      para comprobar la compatibilidad y el funcionamiento
+      del servicio en tu dispositivo.
+    </p>
+
+    <div class="info-note">
+
+      <span>!</span>
+
+      <p>
+        Los servicios son independientes y están sujetos a
+        compatibilidad, cobertura y condiciones de la red.
+        El funcionamiento puede verse afectado por cambios
+        realizados por el operador o por incompatibilidades
+        del dispositivo.
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- CONTACTO -->
+
+  <section class="contact">
+
+    <div class="contact-content">
+
+      <label>
+        04 / CONTACTO
+      </label>
+
+      <h2>
+        ¿Necesitás ayuda?
+      </h2>
+
+      <p>
+        Consultas, pruebas, pagos y comprobantes.
+      </p>
+
+
+      <div class="contact-buttons">
+
+        <a
+          class="contact-btn whatsapp"
+          href="https://wa.me/5493844546841"
+          target="_blank"
+          rel="noopener">
+
+          <span>🟢</span>
+
+          <div>
+            <strong>WhatsApp</strong>
+            <small>
+              Consultas y contratación
+            </small>
+          </div>
+
+        </a>
+
+
+        <a
+          class="contact-btn instagram"
+          href="https://www.instagram.com/cergio.oficial__/"
+          target="_blank"
+          rel="noopener">
+
+          <span>📸</span>
+
+          <div>
+            <strong>Instagram</strong>
+            <small>
+              @cergio.oficial__
+            </small>
+          </div>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
 
 </main>
 
 
 
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- FOOTER -->
 
 <footer>
 
-  <div class="footer-logo">
-    PERSONAL<span>NET</span>
+  <div class="footer-brand">
+
+    <div class="logo">
+      PERSONAL<span>NET</span>
+    </div>
+
+    <span>
+      Internet Argentina
+    </span>
+
   </div>
 
   <span>
@@ -711,39 +727,41 @@
 
 
 
-<!-- =========================
-     CART OVERLAY
-========================= -->
+<!-- CARRITO -->
 
 <div
   id="cartOverlay"
-  class="overlay hidden"
-  onclick="outsideCart(event)">
+  class="overlay hidden">
 
   <div class="cart-modal">
 
     <button
-      class="close-button"
-      onclick="closeCart()">
+      class="x"
+      id="closeCart">
       ×
     </button>
 
 
-    <div class="modal-label">
-      🛒 TU PEDIDO
+    <label>
+      CARRITO
+    </label>
+
+    <h2>
+      Tu pedido
+    </h2>
+
+
+    <div id="cartItems">
     </div>
-
-    <h2>Carrito</h2>
-
-
-    <div id="cartItems"></div>
 
 
     <div
       id="emptyCart"
       class="empty-cart">
 
-      <div>🛒</div>
+      <div>
+        🛒
+      </div>
 
       <strong>
         Tu carrito está vacío
@@ -753,12 +771,6 @@
         Agregá un servicio para comenzar.
       </p>
 
-      <button
-        class="modal-secondary"
-        onclick="closeCart()">
-        Ver servicios
-      </button>
-
     </div>
 
 
@@ -766,7 +778,7 @@
       id="cartBottom"
       class="cart-bottom hidden">
 
-      <div class="total-row">
+      <div class="cart-total">
 
         <span>
           Total
@@ -780,108 +792,62 @@
 
 
       <button
-        class="checkout-button"
-        onclick="openCheckout()">
-        Continuar al pago
-        <span>→</span>
+        class="clear-cart"
+        id="clearCart">
+        Vaciar carrito
       </button>
 
-    </div>
 
-  </div>
+      <div class="customer-form">
 
-</div>
+        <label class="input-label">
+          Nombre
+        </label>
 
-
-
-<!-- =========================
-     CHECKOUT
-========================= -->
-
-<div
-  id="checkoutOverlay"
-  class="overlay hidden">
-
-  <div class="checkout-modal">
-
-    <button
-      class="close-button"
-      onclick="closeCheckout()">
-      ×
-    </button>
+        <input
+          id="customerName"
+          type="text"
+          minlength="2"
+          placeholder="Tu nombre"
+          autocomplete="name"
+        >
 
 
-    <div class="modal-label">
-      FINALIZAR CONTRATACIÓN
-    </div>
+        <label class="input-label">
+          WhatsApp
+        </label>
 
-    <h2>Completá tus datos</h2>
+        <input
+          id="customerPhone"
+          type="tel"
+          inputmode="tel"
+          placeholder="Ej. 3844 123456"
+          autocomplete="tel"
+        >
 
-    <p class="modal-description">
-      Usaremos estos datos para preparar tu mensaje de contratación.
-    </p>
-
-
-    <div class="checkout-summary">
-
-      <div>
-        <span>Pedido</span>
-        <strong id="checkoutItems">
-          —
-        </strong>
       </div>
-
-      <div>
-        <span>Total</span>
-        <strong id="checkoutTotal">
-          $0
-        </strong>
-      </div>
-
-    </div>
-
-
-    <form id="checkoutForm">
-
-      <label>
-        Nombre
-      </label>
-
-      <input
-        id="customerName"
-        type="text"
-        placeholder="Tu nombre"
-        minlength="2"
-        required>
-
-
-      <label>
-        WhatsApp
-      </label>
-
-      <input
-        id="customerPhone"
-        type="tel"
-        inputmode="tel"
-        placeholder="Ej. 11 1234 5678"
-        required>
 
 
       <button
-        class="checkout-button full"
-        type="submit">
+        class="cta full"
+        id="checkoutButton">
 
-        Continuar al pago
-        <span>→</span>
+        💳 Continuar al pago
 
       </button>
 
-    </form>
 
+      <div
+        id="cartError"
+        class="error">
+      </div>
 
-    <p class="secure-note">
-      🔒 Pago mediante Mercado Pago.
-    </p>
+      <p class="hint">
+        Después del pago podrás enviar el comprobante
+        por WhatsApp.
+      </p>
+
+    </div>
 
   </div>
 
@@ -889,36 +855,35 @@
 
 
 
-<!-- =========================
-     AFTER PAYMENT
-========================= -->
+<!-- DESPUÉS DEL PAGO -->
 
 <div
-  id="afterPaymentOverlay"
+  id="afterOverlay"
   class="overlay hidden">
 
-  <div class="after-modal">
+  <div class="afterbox">
 
-    <div class="success-icon">
+    <div class="check">
       ✓
     </div>
 
-    <div class="modal-label">
+    <label>
       PAGO
-    </div>
+    </label>
 
-    <h2>¿Ya realizaste el pago?</h2>
+    <h2>
+      ¿Ya realizaste el pago?
+    </h2>
 
     <p>
-      Cuando termines el pago en Mercado Pago,
-      enviá el comprobante por WhatsApp para procesar
-      tu contratación.
+      Cuando termines en Mercado Pago, enviá el comprobante
+      por WhatsApp para procesar tu contratación.
     </p>
 
 
     <a
-      id="whatsappOrder"
-      class="checkout-button full"
+      id="sendWhatsApp"
+      class="cta full"
       href="#"
       target="_blank"
       rel="noopener">
@@ -929,8 +894,8 @@
 
 
     <button
-      class="modal-secondary full-secondary"
-      onclick="closeAfterPayment()">
+      class="secondary"
+      id="closeAfter">
 
       Cerrar
 
@@ -942,329 +907,9 @@
 
 
 
-<script>
+<!-- JAVASCRIPT -->
 
-/* =========================================
-   CONFIGURACIÓN
-========================================= */
+<script src="script.js"></script>
 
-const MP_LINK =
-"https://link.mercadopago.com.ar/pirunet";
-
-const ADMIN_WHATSAPP =
-"https://wa.me/5493844546841";
-
-
-/* =========================================
-   CARRITO
-========================================= */
-
-let cart = [];
-
-
-function money(number){
-
-  return "$" +
-    Number(number).toLocaleString("es-AR");
-
-}
-
-
-function addToCart(name, price){
-
-  const existing =
-    cart.find(item => item.name === name);
-
-  if(existing){
-
-    existing.quantity++;
-
-  }else{
-
-    cart.push({
-      name:name,
-      price:price,
-      quantity:1
-    });
-
-  }
-
-  updateCart();
-
-  openCart();
-
-}
-
-
-function removeFromCart(index){
-
-  cart.splice(index,1);
-
-  updateCart();
-
-}
-
-
-function changeQuantity(index, change){
-
-  cart[index].quantity += change;
-
-  if(cart[index].quantity <= 0){
-
-    cart.splice(index,1);
-
-  }
-
-  updateCart();
-
-}
-
-
-function getCartTotal(){
-
-  return cart.reduce(
-    (total,item) =>
-      total + item.price * item.quantity,
-    0
-  );
-
-}
-
-
-function getCartCount(){
-
-  return cart.reduce(
-    (total,item) =>
-      total + item.quantity,
-    0
-  );
-
-}
-
-
-/* =========================================
-   ACTUALIZAR CARRITO
-========================================= */
-
-function updateCart(){
-
-  const count =
-    document.getElementById("cartCount");
-
-  const items =
-    document.getElementById("cartItems");
-
-  const empty =
-    document.getElementById("emptyCart");
-
-  const bottom =
-    document.getElementById("cartBottom");
-
-  const total =
-    document.getElementById("cartTotal");
-
-
-  count.textContent =
-    getCartCount();
-
-
-  items.innerHTML = "";
-
-
-  if(cart.length === 0){
-
-    empty.classList.remove("hidden");
-
-    bottom.classList.add("hidden");
-
-    return;
-
-  }
-
-
-  empty.classList.add("hidden");
-
-  bottom.classList.remove("hidden");
-
-
-  cart.forEach((item,index) => {
-
-    const subtotal =
-      item.price * item.quantity;
-
-
-    const element =
-      document.createElement("div");
-
-    element.className =
-      "cart-item";
-
-
-    element.innerHTML = `
-
-      <div class="cart-item-info">
-
-        <strong>
-          ${item.name}
-        </strong>
-
-        <span>
-          ${money(item.price)} c/u
-        </span>
-
-      </div>
-
-
-      <div class="cart-item-right">
-
-        <div class="quantity">
-
-          <button
-            onclick="changeQuantity(${index},-1)">
-            −
-          </button>
-
-          <b>
-            ${item.quantity}
-          </b>
-
-          <button
-            onclick="changeQuantity(${index},1)">
-            +
-          </button>
-
-        </div>
-
-
-        <strong class="subtotal">
-          ${money(subtotal)}
-        </strong>
-
-
-        <button
-          class="remove"
-          onclick="removeFromCart(${index})">
-          ×
-        </button>
-
-      </div>
-
-    `;
-
-
-    items.appendChild(element);
-
-  });
-
-
-  total.textContent =
-    money(getCartTotal());
-
-}
-
-
-/* =========================================
-   ABRIR / CERRAR CARRITO
-========================================= */
-
-function openCart(){
-
-  updateCart();
-
-  document
-    .getElementById("cartOverlay")
-    .classList.remove("hidden");
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-function closeCart(){
-
-  document
-    .getElementById("cartOverlay")
-    .classList.add("hidden");
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-function outsideCart(event){
-
-  if(event.target.id === "cartOverlay"){
-
-    closeCart();
-
-  }
-
-}
-
-
-/* =========================================
-   CHECKOUT
-========================================= */
-
-function openCheckout(){
-
-  if(cart.length === 0){
-
-    return;
-
-  }
-
-
-  const names =
-    cart.map(item => {
-
-      if(item.quantity > 1){
-
-        return `${item.name} ×${item.quantity}`;
-
-      }
-
-      return item.name;
-
-    }).join(", ");
-
-
-  document
-    .getElementById("checkoutItems")
-    .textContent = names;
-
-
-  document
-    .getElementById("checkoutTotal")
-    .textContent =
-    money(getCartTotal());
-
-
-  closeCart();
-
-
-  document
-    .getElementById("checkoutOverlay")
-    .classList.remove("hidden");
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-function closeCheckout(){
-
-  document
-    .getElementById("checkoutOverlay")
-    .classList.add("hidden");
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-/* ====
+</body>
+</html>
