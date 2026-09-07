@@ -1,26 +1,12 @@
-/* =========================================================
-   PERSONALNET
-   SISTEMA DE CARRITO
-   ========================================================= */
+const MP_LINK = "https://link.mercadopago.com.ar/pirunet";
+const ADMIN_WHATSAPP = "5493844546841";
 
-
-/* =========================
-   CONFIGURACIÓN
-========================= */
-
-const MP_LINK =
-  "https://link.mercadopago.com.ar/pirunet";
-
-const ADMIN_WHATSAPP =
-  "5493844546841";
-
-
-/* =========================
-   ESTADO
-========================= */
+const CART_KEY = "personalnet_cart";
+const CUSTOMER_KEY = "personalnet_customer";
+const ORDER_KEY = "personalnet_order";
+const ORDER_WA_KEY = "personalnet_order_wa";
 
 let cart = [];
-
 let customer = {
   name: "",
   phone: ""
@@ -31,496 +17,356 @@ let customer = {
    ELEMENTOS
 ========================= */
 
-const cartOverlay =
-  document.getElementById("cartOverlay");
+const cartOverlay = document.getElementById("cartOverlay");
+const afterOverlay = document.getElementById("afterOverlay");
 
-const afterOverlay =
-  document.getElementById("afterOverlay");
+const cartItems = document.getElementById("cartItems");
+const cartCount = document.getElementById("cartCount");
+const cartTotal = document.getElementById("cartTotal");
 
-const cartItems =
-  document.getElementById("cartItems");
+const emptyCart = document.getElementById("emptyCart");
+const cartBottom = document.getElementById("cartBottom");
+const cartError = document.getElementById("cartError");
 
-const cartCount =
-  document.getElementById("cartCount");
+const customerName = document.getElementById("customerName");
+const customerPhone = document.getElementById("customerPhone");
 
-const cartTotal =
-  document.getElementById("cartTotal");
-
-const emptyCart =
-  document.getElementById("emptyCart");
-
-const cartBottom =
-  document.getElementById("cartBottom");
-
-const cartError =
-  document.getElementById("cartError");
-
-const customerName =
-  document.getElementById("customerName");
-
-const customerPhone =
-  document.getElementById("customerPhone");
-
-const sendWhatsApp =
-  document.getElementById("sendWhatsApp");
+const sendWhatsApp = document.getElementById("sendWhatsApp");
 
 
 /* =========================
-   CARGAR CARRITO
+   UTILIDADES
 ========================= */
 
-function loadCart(){
+function money(value) {
+  return "$" + Number(value || 0).toLocaleString("es-AR");
+}
 
-  try{
 
-    const saved =
-      localStorage.getItem("personalnet_cart");
+function escapeHTML(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-    if(saved){
 
-      cart = JSON.parse(saved);
+function normalizePhone(phone) {
+  return String(phone || "").replace(/\D/g, "");
+}
 
-    }
 
-  }catch(error){
+/* =========================
+   LOCAL STORAGE
+========================= */
 
-    console.error(
-      "No se pudo cargar el carrito:",
-      error
-    );
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
 
+
+function loadCart() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY));
+
+    cart = Array.isArray(saved)
+      ? saved.filter(item =>
+          item &&
+          typeof item.name === "string" &&
+          Number.isFinite(Number(item.price)) &&
+          Number.isFinite(Number(item.quantity))
+        )
+      : [];
+
+    cart = cart.map(item => ({
+      id: item.id || crypto.randomUUID?.() || String(Date.now() + Math.random()),
+      name: item.name,
+      price: Number(item.price),
+      quantity: Math.max(1, Number(item.quantity))
+    }));
+
+  } catch {
     cart = [];
-
   }
 
   renderCart();
 }
 
 
-/* =========================
-   GUARDAR CARRITO
-========================= */
-
-function saveCart(){
-
-  localStorage.setItem(
-    "personalnet_cart",
-    JSON.stringify(cart)
-  );
-
+function saveCustomer() {
+  localStorage.setItem(CUSTOMER_KEY, JSON.stringify(customer));
 }
 
 
-/* =========================
-   FORMATO DINERO
-========================= */
+function loadCustomer() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CUSTOMER_KEY));
 
-function money(value){
-
-  return "$" +
-    Number(value).toLocaleString("es-AR");
-
-}
-
-
-/* =========================
-   AGREGAR AL CARRITO
-========================= */
-
-function addToCart(name, price){
-
-  const existing =
-    cart.find(item => item.name === name);
-
-
-  if(existing){
-
-    existing.quantity += 1;
-
-  }else{
-
-    cart.push({
-
-      id:
-        Date.now() +
-        Math.random(),
-
-      name: name,
-
-      price: Number(price),
-
-      quantity: 1
-
-    });
-
+    if (saved && typeof saved === "object") {
+      customer = {
+        name: typeof saved.name === "string" ? saved.name : "",
+        phone: typeof saved.phone === "string" ? saved.phone : ""
+      };
+    }
+  } catch {
+    customer = {
+      name: "",
+      phone: ""
+    };
   }
 
+  if (customerName) {
+    customerName.value = customer.name;
+  }
+
+  if (customerPhone) {
+    customerPhone.value = customer.phone;
+  }
+}
+
+
+/* =========================
+   CARRITO
+========================= */
+
+function addToCart(name, price) {
+
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`,
+      name,
+      price: Number(price),
+      quantity: 1
+    });
+  }
 
   saveCart();
-
   renderCart();
-
   openCart();
-
-  showAddedMessage();
-
+  showAddedMessage(name);
 }
 
 
-/* =========================
-   CAMBIAR CANTIDAD
-========================= */
+function changeQuantity(id, amount) {
 
-function changeQuantity(id, amount){
+  const item = cart.find(product => product.id === id);
 
-  const item =
-    cart.find(product => product.id === id);
-
-
-  if(!item){
-
-    return;
-
-  }
-
+  if (!item) return;
 
   item.quantity += amount;
 
-
-  if(item.quantity <= 0){
-
-    cart =
-      cart.filter(
-        product => product.id !== id
-      );
-
+  if (item.quantity <= 0) {
+    cart = cart.filter(product => product.id !== id);
   }
 
-
   saveCart();
-
   renderCart();
-
 }
 
 
-/* =========================
-   ELIMINAR PRODUCTO
-========================= */
+function removeItem(id) {
 
-function removeItem(id){
-
-  cart =
-    cart.filter(
-      product => product.id !== id
-    );
-
+  cart = cart.filter(item => item.id !== id);
 
   saveCart();
-
   renderCart();
-
 }
 
 
-/* =========================
-   VACIAR CARRITO
-========================= */
-
-function clearCart(){
+function clearCart() {
 
   cart = [];
 
   saveCart();
-
   renderCart();
 
+  if (cartError) {
+    cartError.textContent = "";
+  }
 }
 
 
-/* =========================
-   RENDERIZAR CARRITO
-========================= */
+function renderCart() {
 
-function renderCart(){
+  if (!cartItems || !cartCount || !cartTotal) return;
 
   cartItems.innerHTML = "";
 
+  const totalItems = cart.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
-  let totalItems = 0;
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
-  let totalPrice = 0;
+  cartCount.textContent = totalItems;
+  cartTotal.textContent = money(totalPrice);
 
+  const isEmpty = cart.length === 0;
 
-  if(cart.length === 0){
-
-    emptyCart.classList.remove(
-      "hidden"
-    );
-
-    cartBottom.classList.add(
-      "hidden"
-    );
-
-  }else{
-
-    emptyCart.classList.add(
-      "hidden"
-    );
-
-    cartBottom.classList.remove(
-      "hidden"
-    );
-
-
-    cart.forEach(item => {
-
-      const subtotal =
-        item.price *
-        item.quantity;
-
-
-      totalItems +=
-        item.quantity;
-
-
-      totalPrice +=
-        subtotal;
-
-
-      const element =
-        document.createElement("div");
-
-
-      element.className =
-        "cart-item";
-
-
-      element.innerHTML = `
-
-        <div class="cart-item-info">
-
-          <div class="cart-item-name">
-            ${escapeHTML(item.name)}
-          </div>
-
-          <div class="cart-item-price">
-            ${money(subtotal)}
-          </div>
-
-        </div>
-
-
-        <div class="cart-item-controls">
-
-          <button
-            class="qty-btn"
-            onclick="changeQuantity(${item.id}, -1)">
-            −
-          </button>
-
-          <span class="qty">
-            ${item.quantity}
-          </span>
-
-          <button
-            class="qty-btn"
-            onclick="changeQuantity(${item.id}, 1)">
-            +
-          </button>
-
-          <button
-            class="remove-btn"
-            onclick="removeItem(${item.id})"
-            title="Eliminar">
-            🗑️
-          </button>
-
-        </div>
-
-      `;
-
-
-      cartItems.appendChild(
-        element
-      );
-
-    });
-
+  if (emptyCart) {
+    emptyCart.style.display = isEmpty ? "block" : "none";
   }
 
-
-  cartCount.textContent =
-    totalItems;
-
-
-  cartTotal.textContent =
-    money(totalPrice);
-
-}
-
-
-/* =========================
-   ESCAPAR HTML
-========================= */
-
-function escapeHTML(value){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    value;
-
-  return div.innerHTML;
-
-}
-
-
-/* =========================
-   ABRIR CARRITO
-========================= */
-
-function openCart(){
-
-  cartOverlay.classList.remove(
-    "hidden"
-  );
-
-  document.body.classList.add(
-    "locked"
-  );
-
-}
-
-
-/* =========================
-   CERRAR CARRITO
-========================= */
-
-function closeCart(){
-
-  cartOverlay.classList.add(
-    "hidden"
-  );
-
-  document.body.classList.remove(
-    "locked"
-  );
-
-}
-
-
-/* =========================
-   MENSAJE DE PRODUCTO AGREGADO
-========================= */
-
-function showAddedMessage(){
-
-  const old =
-    document.getElementById(
-      "addedMessage"
-    );
-
-
-  if(old){
-
-    old.remove();
-
+  if (cartBottom) {
+    cartBottom.style.display = isEmpty ? "none" : "block";
   }
 
-
-  const message =
-    document.createElement("div");
+  if (isEmpty) return;
 
 
-  message.id =
-    "addedMessage";
+  cart.forEach(item => {
 
+    const element = document.createElement("div");
 
-  message.textContent =
-    "✓ Producto agregado al carrito";
+    element.className = "cart-item";
 
+    element.innerHTML = `
+      <div class="cart-item-info">
+        <div class="cart-item-name">
+          ${escapeHTML(item.name)}
+        </div>
 
-  message.style.position =
-    "fixed";
+        <div class="cart-item-price">
+          ${money(item.price)} c/u
+        </div>
+      </div>
 
-  message.style.left =
-    "50%";
+      <div class="cart-item-controls">
 
-  message.style.bottom =
-    "25px";
+        <button
+          class="qty-btn"
+          type="button"
+          data-action="decrease"
+          data-id="${escapeHTML(item.id)}"
+          aria-label="Disminuir cantidad">
+          −
+        </button>
 
-  message.style.transform =
-    "translateX(-50%)";
+        <span class="qty">
+          ${item.quantity}
+        </span>
 
-  message.style.zIndex =
-    "300";
+        <button
+          class="qty-btn"
+          type="button"
+          data-action="increase"
+          data-id="${escapeHTML(item.id)}"
+          aria-label="Aumentar cantidad">
+          +
+        </button>
 
-  message.style.padding =
-    "12px 17px";
+        <button
+          class="remove-btn"
+          type="button"
+          data-action="remove"
+          data-id="${escapeHTML(item.id)}"
+          aria-label="Eliminar producto">
+          ×
+        </button>
 
-  message.style.borderRadius =
-    "12px";
+      </div>
+    `;
 
-  message.style.background =
-    "#00d084";
-
-  message.style.color =
-    "#03120c";
-
-  message.style.fontSize =
-    "12px";
-
-  message.style.fontWeight =
-    "900";
-
-  message.style.boxShadow =
-    "0 10px 30px rgba(0,0,0,.4)";
-
-
-  document.body.appendChild(
-    message
-  );
-
-
-  setTimeout(() => {
-
-    message.remove();
-
-  }, 1800);
-
+    cartItems.appendChild(element);
+  });
 }
 
 
 /* =========================
-   PEDIR PRUEBA
+   MENSAJE DE PRODUCTO
 ========================= */
 
-function requestTrial(service){
+let toastTimer = null;
+
+
+function showAddedMessage(name) {
+
+  const oldToast = document.querySelector(".toast");
+
+  if (oldToast) {
+    oldToast.remove();
+  }
+
+  const toast = document.createElement("div");
+
+  toast.className = "toast";
+  toast.textContent = `${name} Agregado Al Carrito ✓`;
+
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.remove();
+    }, 250);
+  }, 2200);
+}
+
+
+/* =========================
+   MODAL CARRITO
+========================= */
+
+function openCart() {
+
+  if (!cartOverlay) return;
+
+  cartOverlay.classList.add("active");
+  cartOverlay.setAttribute("aria-hidden", "false");
+
+  document.body.classList.add("locked");
+
+  if (cartError) {
+    cartError.textContent = "";
+  }
+}
+
+
+function closeCart() {
+
+  if (!cartOverlay) return;
+
+  cartOverlay.classList.remove("active");
+  cartOverlay.setAttribute("aria-hidden", "true");
+
+  if (!afterOverlay?.classList.contains("active")) {
+    document.body.classList.remove("locked");
+  }
+}
+
+
+/* =========================
+   TRIAL
+========================= */
+
+function requestTrial(service) {
 
   const message =
-`🧪 SOLICITUD DE PRUEBA
-
-Hola, quiero solicitar una prueba de ${service}.
-
-📱 Quiero comprobar si funciona correctamente en mi dispositivo antes de contratar.
-
-Gracias.`;
-
+    `Hola PERSONALNET 👋\n\n` +
+    `Quiero Solicitar Una Prueba De ${service}.\n\n` +
+    `¿Me Pueden Indicar Cómo Continuar?`;
 
   const url =
-    "https://wa.me/" +
-    ADMIN_WHATSAPP +
-    "?text=" +
-    encodeURIComponent(message);
+    `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-
-  window.open(
-    url,
-    "_blank"
-  );
-
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 
@@ -528,387 +374,304 @@ Gracias.`;
    CHECKOUT
 ========================= */
 
-function checkout(){
+function checkout() {
 
-  cartError.textContent = "";
-
-
-  if(cart.length === 0){
-
-    cartError.textContent =
-      "Tu carrito está vacío.";
-
+  if (!cart.length) {
+    showCartError("Tu Carrito Está Vacío.");
     return;
-
   }
 
 
-  const name =
-    customerName.value.trim();
+  const name = customerName?.value.trim() || "";
+  const phone = customerPhone?.value.trim() || "";
 
 
-  const phone =
-    customerPhone.value.trim();
-
-
-  if(name.length < 2){
-
-    cartError.textContent =
-      "Ingresá tu nombre.";
-
-    customerName.focus();
-
+  if (name.length < 2) {
+    showCartError("Ingresá Tu Nombre.");
+    customerName?.focus();
     return;
-
   }
 
 
-  if(phone.length < 6){
-
-    cartError.textContent =
-      "Ingresá un número de WhatsApp válido.";
-
-    customerPhone.focus();
-
+  if (normalizePhone(phone).length < 8) {
+    showCartError("Ingresá Un Número De WhatsApp Válido.");
+    customerPhone?.focus();
     return;
-
   }
 
 
-  customer.name =
-    name;
+  customer = {
+    name,
+    phone
+  };
 
-  customer.phone =
-    phone;
-
-
-  const orderMessage =
-    createOrderMessage();
+  saveCustomer();
 
 
-  const whatsappURL =
-    "https://wa.me/" +
-    ADMIN_WHATSAPP +
-    "?text=" +
-    encodeURIComponent(
-      orderMessage
-    );
+  const message = createOrderMessage();
+
+  const waUrl =
+    `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
 
   localStorage.setItem(
-    "personalnet_customer",
-    JSON.stringify(customer)
+    ORDER_KEY,
+    JSON.stringify({
+      customer,
+      items: cart,
+      total: getCartTotal(),
+      createdAt: new Date().toISOString()
+    })
   );
 
-
   localStorage.setItem(
-    "personalnet_order",
-    orderMessage
-  );
-
-
-  localStorage.setItem(
-    "personalnet_order_wa",
-    whatsappURL
+    ORDER_WA_KEY,
+    waUrl
   );
 
 
   /*
-    Abrimos Mercado Pago.
+    Primero Abrimos Mercado Pago.
+    Después Mostramos El Paso Final
+    Para Enviar El Comprobante.
   */
 
   window.open(
     MP_LINK,
-    "_blank"
+    "_blank",
+    "noopener,noreferrer"
   );
 
 
   closeCart();
 
 
-  /*
-    Mostramos el paso para enviar
-    comprobante.
-  */
-
   setTimeout(() => {
-
     showAfterPayment();
-
   }, 600);
-
 }
 
 
-/* =========================
-   CREAR MENSAJE DEL PEDIDO
-========================= */
+function createOrderMessage() {
 
-function createOrderMessage(){
+  const lines = cart.map(item => {
 
-  let products = "";
+    const subtotal = item.price * item.quantity;
 
-  let total = 0;
-
-
-  cart.forEach(item => {
-
-    const subtotal =
-      item.price *
-      item.quantity;
-
-
-    total += subtotal;
-
-
-    products +=
-      `• ${item.name} x${item.quantity} — ${money(subtotal)}\n`;
+    return (
+      `• ${item.name}\n` +
+      `  Cantidad: ${item.quantity}\n` +
+      `  Subtotal: ${money(subtotal)}`
+    );
 
   });
 
 
-  return `🛒 NUEVA CONTRATACIÓN
+  return (
+    `Hola PERSONALNET 👋\n\n` +
+    `Quiero Confirmar Mi Compra.\n\n` +
 
-👤 Cliente: ${customer.name}
-📱 WhatsApp: ${customer.phone}
+    `👤 Cliente: ${customer.name}\n` +
+    `📱 WhatsApp: ${customer.phone}\n\n` +
 
-📦 PRODUCTOS:
-${products}
-💰 TOTAL: ${money(total)}
+    `🛒 Productos:\n` +
+    `${lines.join("\n\n")}\n\n` +
 
-💳 Pago realizado mediante Mercado Pago.
+    `💰 Total: ${money(getCartTotal())}\n\n` +
 
-📎 Voy a enviar el comprobante de pago.`;
+    `💳 Medio De Pago: Mercado Pago\n\n` +
 
+    `Adjunto El Comprobante De Pago Para Verificar La Compra.`
+  );
+}
+
+
+function getCartTotal() {
+
+  return cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+}
+
+
+function showCartError(message) {
+
+  if (!cartError) return;
+
+  cartError.textContent = message;
 }
 
 
 /* =========================
-   DESPUÉS DEL PAGO
+   POST-PAGO
 ========================= */
 
-function showAfterPayment(){
+function showAfterPayment() {
 
-  const url =
-    localStorage.getItem(
-      "personalnet_order_wa"
-    );
+  if (!afterOverlay || !sendWhatsApp) return;
 
+  const savedUrl =
+    localStorage.getItem(ORDER_WA_KEY);
 
-  if(url){
+  if (savedUrl) {
+    sendWhatsApp.href = savedUrl;
+  } else {
+
+    const message =
+      `Hola PERSONALNET 👋\n\n` +
+      `Acabo De Realizar Un Pago Y Quiero Enviar El Comprobante.`;
 
     sendWhatsApp.href =
-      url;
-
+      `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
   }
 
 
-  afterOverlay.classList.remove(
-    "hidden"
-  );
+  afterOverlay.classList.add("active");
+  afterOverlay.setAttribute("aria-hidden", "false");
 
-  document.body.classList.add(
-    "locked"
-  );
+  document.body.classList.add("locked");
+}
 
+
+function closeAfterPayment() {
+
+  if (!afterOverlay) return;
+
+  afterOverlay.classList.remove("active");
+  afterOverlay.setAttribute("aria-hidden", "true");
+
+  if (!cartOverlay?.classList.contains("active")) {
+    document.body.classList.remove("locked");
+  }
 }
 
 
 /* =========================
-   CERRAR DESPUÉS DEL PAGO
+   EVENTOS
 ========================= */
 
-function closeAfterPayment(){
+document.getElementById("openCart")
+  ?.addEventListener("click", openCart);
 
-  afterOverlay.classList.add(
-    "hidden"
-  );
 
-  document.body.classList.remove(
-    "locked"
-  );
+document.getElementById("closeCart")
+  ?.addEventListener("click", closeCart);
 
-}
 
+document.getElementById("clearCart")
+  ?.addEventListener("click", clearCart);
 
-/* =========================
-   BOTONES
-========================= */
 
-document
-  .getElementById("openCart")
-  .addEventListener(
-    "click",
-    openCart
-  );
+document.getElementById("checkoutButton")
+  ?.addEventListener("click", checkout);
 
 
-document
-  .getElementById("closeCart")
-  .addEventListener(
-    "click",
-    closeCart
-  );
+document.getElementById("closeAfter")
+  ?.addEventListener("click", closeAfterPayment);
 
 
-document
-  .getElementById("clearCart")
-  .addEventListener(
-    "click",
-    clearCart
-  );
+document.getElementById("closeAfterBottom")
+  ?.addEventListener("click", closeAfterPayment);
 
 
-document
-  .getElementById("checkoutButton")
-  .addEventListener(
-    "click",
-    checkout
-  );
+/* BOTONES DEL CARRITO */
 
+cartItems?.addEventListener("click", event => {
 
-document
-  .getElementById("closeAfter")
-  .addEventListener(
-    "click",
-    closeAfterPayment
-  );
+  const button = event.target.closest("button[data-action]");
 
+  if (!button) return;
 
-/* =========================
-   CERRAR TOCANDO AFUERA
-========================= */
+  const id = button.dataset.id;
+  const action = button.dataset.action;
 
-cartOverlay.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target ===
-      cartOverlay
-    ){
-
-      closeCart();
-
-    }
-
-  }
-);
-
-
-afterOverlay.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target ===
-      afterOverlay
-    ){
-
-      closeAfterPayment();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ESC PARA CERRAR
-========================= */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(event.key !== "Escape"){
-
-      return;
-
-    }
-
-
-    if(
-      !cartOverlay.classList.contains(
-        "hidden"
-      )
-    ){
-
-      closeCart();
-
-    }
-
-
-    if(
-      !afterOverlay.classList.contains(
-        "hidden"
-      )
-    ){
-
-      closeAfterPayment();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   CARGAR DATOS DEL CLIENTE
-========================= */
-
-function loadCustomer(){
-
-  try{
-
-    const saved =
-      localStorage.getItem(
-        "personalnet_customer"
-      );
-
-
-    if(!saved){
-
-      return;
-
-    }
-
-
-    const data =
-      JSON.parse(saved);
-
-
-    if(data.name){
-
-      customerName.value =
-        data.name;
-
-    }
-
-
-    if(data.phone){
-
-      customerPhone.value =
-        data.phone;
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "Error cargando cliente:",
-      error
-    );
-
+  if (action === "increase") {
+    changeQuantity(id, 1);
   }
 
-}
+  if (action === "decrease") {
+    changeQuantity(id, -1);
+  }
+
+  if (action === "remove") {
+    removeItem(id);
+  }
+});
+
+
+/* CERRAR HACIENDO CLICK AFUERA */
+
+cartOverlay?.addEventListener("click", event => {
+
+  if (event.target === cartOverlay) {
+    closeCart();
+  }
+
+});
+
+
+afterOverlay?.addEventListener("click", event => {
+
+  if (event.target === afterOverlay) {
+    closeAfterPayment();
+  }
+
+});
+
+
+/* ESC */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key !== "Escape") return;
+
+  if (afterOverlay?.classList.contains("active")) {
+    closeAfterPayment();
+    return;
+  }
+
+  if (cartOverlay?.classList.contains("active")) {
+    closeCart();
+  }
+
+});
+
+
+/* GUARDAR DATOS DEL CLIENTE */
+
+customerName?.addEventListener("input", () => {
+
+  customer.name = customerName.value;
+
+  saveCustomer();
+
+});
+
+
+customerPhone?.addEventListener("input", () => {
+
+  customer.phone = customerPhone.value;
+
+  saveCustomer();
+
+});
+
+
+/* CERRAR MENÚ AL NAVEGAR */
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+  link.addEventListener("click", () => {
+    closeCart();
+  });
+
+});
 
 
 /* =========================
-   INICIO
+   INICIALIZACIÓN
 ========================= */
 
 loadCart();
-
 loadCustomer();
