@@ -1,386 +1,253 @@
-/* =========================================
-   PERSONALNET
-   SISTEMA DE CARRITO + WHATSAPP
-========================================= */
-
 const products = {
 
-  "cg-personal-7": {
-    name: "CGLite Personal",
-    info: "7 días · Línea Personal",
-    days: 7,
-    price: 4500
+  personal7:{
+    name:"CGLite Personal",
+    info:"7 días · Línea Personal",
+    price:4500
   },
 
-  "cg-personal-15": {
-    name: "CGLite Personal",
-    info: "15 días · Línea Personal",
-    days: 15,
-    price: 6000
+  personal15:{
+    name:"CGLite Personal",
+    info:"15 días · Línea Personal",
+    price:6000
   },
 
-  "cg-personal-30": {
-    name: "CGLite Personal",
-    info: "30 días · Línea Personal",
-    days: 30,
-    price: 8000
+  personal30:{
+    name:"CGLite Personal",
+    info:"30 días · Línea Personal",
+    price:8000
   },
 
-  "cg-claro-7": {
-    name: "CGLite Claro AR",
-    info: "7 días · Línea Claro",
-    days: 7,
-    price: 4500
+  claro7:{
+    name:"CGLite Claro AR",
+    info:"7 días · Línea Claro",
+    price:4500
   },
 
-  "cg-claro-15": {
-    name: "CGLite Claro AR",
-    info: "15 días · Línea Claro",
-    days: 15,
-    price: 6000
+  claro15:{
+    name:"CGLite Claro AR",
+    info:"15 días · Línea Claro",
+    price:6000
   },
 
-  "cg-claro-30": {
-    name: "CGLite Claro AR",
-    info: "30 días · Línea Claro",
-    days: 30,
-    price: 8000
+  claro30:{
+    name:"CGLite Claro AR",
+    info:"30 días · Línea Claro",
+    price:8000
   },
 
-  "http-1": {
-    name: "HTTP Custom Personal",
-    info: "30 días · 1 dispositivo",
-    days: 30,
-    price: 7000
+  http1:{
+    name:"HTTP Custom Personal",
+    info:"30 días · 1 dispositivo",
+    price:7000
   },
 
-  "http-2": {
-    name: "HTTP Custom Personal",
-    info: "30 días · 2 dispositivos",
-    days: 30,
-    price: 12000
+  http2:{
+    name:"HTTP Custom Personal",
+    info:"30 días · 2 dispositivos",
+    price:12000
   }
 
 };
 
 
-/* =========================================
-   ESTADO
-========================================= */
-
 let cart = [];
 
 
-/* =========================================
-   ELEMENTOS
-========================================= */
-
-const cartElement = document.getElementById("cart");
-const cartOverlay = document.getElementById("cartOverlay");
-const openCartButton = document.getElementById("openCart");
-const closeCartButton = document.getElementById("closeCart");
-
-const cartItemsElement = document.getElementById("cartItems");
-const cartCountElement = document.getElementById("cartCount");
-const cartTotalElement = document.getElementById("cartTotal");
-
-const clearCartButton = document.getElementById("clearCart");
-const whatsappButton = document.getElementById("whatsappButton");
-
-const customerName = document.getElementById("customerName");
-const customerPhone = document.getElementById("customerPhone");
-
-const toast = document.getElementById("toast");
-const toastText = document.getElementById("toastText");
-
-
-/* =========================================
-   FORMATO PRECIO
-========================================= */
-
-function formatPrice(value) {
+function money(value){
 
   return "$" + value.toLocaleString("es-AR");
 
 }
 
 
-/* =========================================
-   ABRIR CARRITO
-========================================= */
+function addToCart(id){
 
-function openCart() {
+  cart.push(id);
 
-  cartElement.classList.add("active");
-  cartOverlay.classList.add("active");
+  updateCart();
 
-  document.body.classList.add("cart-open");
+  openCart();
 
-}
-
-
-/* =========================================
-   CERRAR CARRITO
-========================================= */
-
-function closeCart() {
-
-  cartElement.classList.remove("active");
-  cartOverlay.classList.remove("active");
-
-  document.body.classList.remove("cart-open");
+  showToast();
 
 }
 
 
-/* =========================================
-   EVENTOS CARRITO
-========================================= */
+function removeItem(index){
 
-openCartButton.addEventListener("click", openCart);
+  cart.splice(index,1);
 
-closeCartButton.addEventListener("click", closeCart);
-
-cartOverlay.addEventListener("click", closeCart);
-
-
-/* =========================================
-   AGREGAR PRODUCTO
-========================================= */
-
-document.querySelectorAll(".buy-button").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    const productId = button.dataset.product;
-
-    if (!products[productId]) {
-      return;
-    }
-
-    cart.push(productId);
-
-    updateCart();
-
-    showToast(products[productId].name);
-
-    openCart();
-
-  });
-
-});
-
-
-/* =========================================
-   ACTUALIZAR CARRITO
-========================================= */
-
-function updateCart() {
-
-  cartCountElement.textContent = cart.length;
-
-  const total = cart.reduce((sum, productId) => {
-
-    return sum + products[productId].price;
-
-  }, 0);
-
-  cartTotalElement.textContent = formatPrice(total);
-
-
-  if (cart.length === 0) {
-
-    cartItemsElement.innerHTML = `
-
-      <div class="empty-cart">
-
-        <div class="empty-icon">
-          🛒
-        </div>
-
-        <h3>
-          Tu carrito está vacío
-        </h3>
-
-        <p>
-          Agregá un plan para comenzar tu pedido.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  cartItemsElement.innerHTML = "";
-
-
-  cart.forEach((productId, index) => {
-
-    const product = products[productId];
-
-    const item = document.createElement("div");
-
-    item.className = "cart-item";
-
-    item.innerHTML = `
-
-      <div>
-
-        <h4>
-          ${product.name}
-        </h4>
-
-        <p>
-          ${product.info}
-        </p>
-
-        <div class="cart-item-price">
-          ${formatPrice(product.price)}
-        </div>
-
-      </div>
-
-      <button
-        class="remove-item"
-        type="button"
-        data-index="${index}">
-        ×
-      </button>
-
-    `;
-
-    cartItemsElement.appendChild(item);
-
-  });
-
-
-  document.querySelectorAll(".remove-item").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      const index = Number(button.dataset.index);
-
-      cart.splice(index, 1);
-
-      updateCart();
-
-    });
-
-  });
+  updateCart();
 
 }
 
 
-/* =========================================
-   VACIAR CARRITO
-========================================= */
-
-clearCartButton.addEventListener("click", () => {
-
-  if (cart.length === 0) {
-    return;
-  }
+function clearCart(){
 
   cart = [];
 
   updateCart();
 
-});
+}
 
 
-/* =========================================
-   TOAST
-========================================= */
+function updateCart(){
 
-let toastTimer;
+  const container = document.getElementById("cartItems");
+  const count = document.getElementById("cartCount");
+  const total = document.getElementById("cartTotal");
 
-function showToast(productName) {
+  count.textContent = cart.length;
 
-  toastText.textContent =
-    `${productName} agregado correctamente.`;
+  if(cart.length === 0){
 
-  toast.classList.add("show");
+    container.innerHTML = `
+      <div class="empty">
+        <div>🛒</div>
+        <h3>Tu carrito está vacío</h3>
+        <p>Agregá un plan para comenzar.</p>
+      </div>
+    `;
 
-  clearTimeout(toastTimer);
+    total.textContent = "$0";
 
-  toastTimer = setTimeout(() => {
+    return;
 
-    toast.classList.remove("show");
+  }
 
-  }, 2800);
+
+  let totalPrice = 0;
+
+  container.innerHTML = cart.map((id,index)=>{
+
+    const item = products[id];
+
+    totalPrice += item.price;
+
+    return `
+      <div class="cart-item">
+
+        <div>
+          <strong>${item.name}</strong>
+          <small>${item.info}</small>
+        </div>
+
+        <div>
+          <strong>${money(item.price)}</strong>
+          <button onclick="removeItem(${index})">Eliminar</button>
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+
+
+  total.textContent = money(totalPrice);
 
 }
 
 
-/* =========================================
-   WHATSAPP
-========================================= */
+function openCart(){
 
-whatsappButton.addEventListener("click", () => {
+  document.getElementById("cart").classList.add("active");
 
-  if (cart.length === 0) {
+  document.getElementById("overlay").classList.add("active");
 
-    alert("Primero agregá al menos un plan al carrito.");
+}
+
+
+function closeCart(){
+
+  document.getElementById("cart").classList.remove("active");
+
+  document.getElementById("overlay").classList.remove("active");
+
+}
+
+
+function showToast(){
+
+  const toast = document.getElementById("toast");
+
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },1800);
+
+}
+
+
+function sendWhatsApp(){
+
+  if(cart.length === 0){
+
+    alert("Agregá al menos un plan al pedido.");
 
     return;
+
   }
 
 
-  const name = customerName.value.trim();
-  const phone = customerPhone.value.trim();
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
 
 
-  if (!name) {
-
-    customerName.focus();
+  if(!name){
 
     alert("Ingresá tu nombre.");
 
     return;
+
   }
 
 
-  if (!phone) {
-
-    customerPhone.focus();
+  if(!phone){
 
     alert("Ingresá tu número de teléfono.");
 
     return;
+
   }
 
 
-  const total = cart.reduce((sum, productId) => {
+  let total = 0;
 
-    return sum + products[productId].price;
+  let message =
+`Hola PERSONALNET 👋
 
-  }, 0);
+Quiero realizar este pedido:
+
+`;
 
 
-  const lines = cart.map(productId => {
+  cart.forEach(id=>{
 
-    const product = products[productId];
+    const item = products[id];
 
-    return `• ${product.name} — ${product.info} — ${formatPrice(product.price)}`;
+    total += item.price;
+
+    message +=
+`• ${item.name} — ${item.info} — ${money(item.price)}
+`;
 
   });
 
 
-  const message = `Hola PERSONALNET 👋
-
-Quiero realizar este pedido:
-
-${lines.join("\n")}
-
+  message +=
+`
 ━━━━━━━━━━━━━━
 
-Total: ${formatPrice(total)}
+Total: ${money(total)}
 Nombre: ${name}
-Teléfono: ${phone}`;
+Teléfono: ${phone}
+
+Quedo atento/a. Gracias.`;
 
 
   const url =
@@ -388,51 +255,36 @@ Teléfono: ${phone}`;
     encodeURIComponent(message);
 
 
-  window.open(url, "_blank");
+  window.open(url,"_blank");
 
-});
-
-
-/* =========================================
-   FILTROS
-========================================= */
-
-const filters = document.querySelectorAll(".filter");
-const planCards = document.querySelectorAll(".plan-card");
+}
 
 
-filters.forEach(filter => {
+/* FILTROS */
 
-  filter.addEventListener("click", () => {
+document.querySelectorAll(".filter").forEach(button=>{
 
-    filters.forEach(item => {
-      item.classList.remove("active");
-    });
+  button.addEventListener("click",()=>{
 
-    filter.classList.add("active");
+    document
+      .querySelectorAll(".filter")
+      .forEach(btn=>btn.classList.remove("active"));
 
+    button.classList.add("active");
 
-    const selected = filter.dataset.filter;
+    const filter = button.dataset.filter;
 
+    document.querySelectorAll(".plan").forEach(plan=>{
 
-    planCards.forEach(card => {
+      const days = plan.dataset.days;
 
-      const days = card.dataset.days;
+      if(filter === "all" || days === filter){
 
-      if (selected === "all" || selected === days) {
+        plan.style.display = "";
 
-        card.classList.remove("filtered-out");
+      }else{
 
-        requestAnimationFrame(() => {
-
-          card.style.animation =
-            "filterIn .35s cubic-bezier(.22,1,.36,1)";
-
-        });
-
-      } else {
-
-        card.classList.add("filtered-out");
+        plan.style.display = "none";
 
       }
 
@@ -443,151 +295,40 @@ filters.forEach(filter => {
 });
 
 
-/* =========================================
-   ANIMACIÓN FILTROS
-========================================= */
+/* REVEAL */
 
-const filterStyle = document.createElement("style");
+const observer =
+new IntersectionObserver(
+(entries)=>{
 
-filterStyle.textContent = `
+  entries.forEach(entry=>{
 
-@keyframes filterIn {
+    if(entry.isIntersecting){
 
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(.98);
-  }
+      entry.target.style.opacity = "1";
+      entry.target.style.transform = "translateY(0)";
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-}
-
-`;
-
-document.head.appendChild(filterStyle);
-
-
-/* =========================================
-   REVEAL AL HACER SCROLL
-========================================= */
-
-const revealElements =
-  document.querySelectorAll(".reveal");
-
-
-const revealObserver =
-  new IntersectionObserver(
-
-    entries => {
-
-      entries.forEach(entry => {
-
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        entry.target.classList.add("visible");
-
-        revealObserver.unobserve(entry.target);
-
-      });
-
-    },
-
-    {
-      threshold: .12
     }
-
-  );
-
-
-revealElements.forEach(element => {
-
-  revealObserver.observe(element);
-
-});
-
-
-/* =========================================
-   ANIMACIÓN ESCALONADA
-========================================= */
-
-document.querySelectorAll(
-  ".plans-grid .plan-card"
-).forEach((card, index) => {
-
-  card.style.transitionDelay =
-    `${Math.min(index * 45, 250)}ms`;
-
-});
-
-
-document.querySelectorAll(
-  ".service-grid .service-card"
-).forEach((card, index) => {
-
-  card.style.transitionDelay =
-    `${index * 80}ms`;
-
-});
-
-
-/* =========================================
-   ESC PARA CERRAR
-========================================= */
-
-document.addEventListener("keydown", event => {
-
-  if (event.key === "Escape") {
-
-    closeCart();
-
-  }
-
-});
-
-
-/* =========================================
-   NAVEGACIÓN SUAVE
-========================================= */
-
-document.querySelectorAll(
-  'a[href^="#"]'
-).forEach(link => {
-
-  link.addEventListener("click", event => {
-
-    const targetId =
-      link.getAttribute("href");
-
-    if (!targetId || targetId === "#") {
-      return;
-    }
-
-    const target =
-      document.querySelector(targetId);
-
-    if (!target) {
-      return;
-    }
-
-    event.preventDefault();
-
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
 
   });
 
+},
+{
+  threshold:.08
 });
 
 
-/* =========================================
-   INICIALIZAR
-========================================= */
+document
+  .querySelectorAll(".service-card,.plan,.step,details")
+  .forEach(el=>{
+
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
+    el.style.transition = "opacity .6s ease, transform .6s ease";
+
+    observer.observe(el);
+
+  });
+
 
 updateCart();
