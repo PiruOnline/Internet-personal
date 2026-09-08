@@ -1,321 +1,313 @@
-const products = {
+const MERCADO_PAGO =
+  "https://link.mercadopago.com.ar/pirunet";
 
-  "cg-personal-7": {
-    name: "CGLite Personal",
-    info: "7 días · Línea Personal",
-    days: 7,
-    price: 4500
-  },
-
-  "cg-personal-15": {
-    name: "CGLite Personal",
-    info: "15 días · Línea Personal",
-    days: 15,
-    price: 6000
-  },
-
-  "cg-personal-30": {
-    name: "CGLite Personal",
-    info: "30 días · Línea Personal",
-    days: 30,
-    price: 8000
-  },
-
-  "cg-claro-7": {
-    name: "CGLite Claro",
-    info: "7 días · Línea Claro",
-    days: 7,
-    price: 4500
-  },
-
-  "cg-claro-15": {
-    name: "CGLite Claro",
-    info: "15 días · Línea Claro",
-    days: 15,
-    price: 6000
-  },
-
-  "cg-claro-30": {
-    name: "CGLite Claro",
-    info: "30 días · Línea Claro",
-    days: 30,
-    price: 8000
-  },
-
-  "http-1": {
-    name: "HTTP Custom",
-    info: "30 días · 1 dispositivo",
-    days: 30,
-    price: 7000
-  },
-
-  "http-2": {
-    name: "HTTP Custom",
-    info: "30 días · 2 dispositivos",
-    days: 30,
-    price: 12000
-  }
-
-};
-
+const WHATSAPP =
+  "5493844546841";
 
 let cart = [];
 
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartItems = document.getElementById("cartItems");
+const cartCount = document.getElementById("cartCount");
+const cartTotal = document.getElementById("cartTotal");
+const emptyCart = document.getElementById("emptyCart");
 
-const $ = selector =>
-  document.querySelector(selector);
+const openCart = document.getElementById("openCart");
+const closeCart = document.getElementById("closeCart");
 
+const customerName = document.getElementById("customerName");
+const customerPhone = document.getElementById("customerPhone");
 
-const money = number =>
-  "$" + number.toLocaleString("es-AR");
-
-
-function render(){
-
-  const box = $("#cartItems");
-
-  box.innerHTML = "";
-
-
-  if(!cart.length){
-
-    $("#emptyCart").style.display = "block";
-
-  }else{
-
-    $("#emptyCart").style.display = "none";
+const mercadoPago = document.getElementById("mercadoPago");
+const whatsappOrder = document.getElementById("whatsappOrder");
+const clearCart = document.getElementById("clearCart");
 
 
-    cart.forEach((product,index)=>{
+/* =========================
+   CARRITO
+========================= */
 
-      const row = document.createElement("div");
+function formatPrice(value) {
+  return "$" + Number(value).toLocaleString("es-AR");
+}
 
-      row.className = "cart-row";
+function updateCart() {
+  cartItems.innerHTML = "";
 
-
-      row.innerHTML = `
-
-        <div class="cart-row-top">
-
-          <b>${product.name}</b>
-
-          <strong>${money(product.price)}</strong>
-
-        </div>
-
-        <small>${product.info}</small>
-
-        <button
-          class="remove"
-          data-index="${index}">
-          Quitar
-        </button>
-
-      `;
-
-
-      box.appendChild(row);
-
-    });
-
+  if (cart.length === 0) {
+    emptyCart.style.display = "grid";
+  } else {
+    emptyCart.style.display = "none";
   }
 
+  let total = 0;
 
-  $("#cartCount").textContent = cart.length;
+  cart.forEach((item, index) => {
+    total += Number(item.price);
 
+    const element = document.createElement("div");
+    element.className = "cart-item";
 
-  const total = cart.reduce(
-    (sum,product) => sum + product.price,
-    0
-  );
+    element.innerHTML = `
+      <div class="cart-item-top">
+        <div>
+          <h3>${escapeHTML(item.product)}</h3>
+          <p>${escapeHTML(item.duration)}</p>
+        </div>
 
+        <div class="cart-item-price">
+          ${formatPrice(item.price)}
+        </div>
+      </div>
 
-  $("#cartTotal").textContent = money(total);
+      <button class="remove-item" data-index="${index}">
+        Eliminar
+      </button>
+    `;
 
-
-  box.querySelectorAll(".remove").forEach(button=>{
-
-    button.onclick = ()=>{
-
-      cart.splice(
-        Number(button.dataset.index),
-        1
-      );
-
-      render();
-
-    };
-
+    cartItems.appendChild(element);
   });
 
+  cartTotal.textContent = formatPrice(total);
+  cartCount.textContent = cart.length;
+
+  document.querySelectorAll(".remove-item").forEach(button => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.index);
+      cart.splice(index, 1);
+      updateCart();
+    });
+  });
 }
 
 
-function openCart(){
+function addToCart(product, duration, price) {
+  cart.push({
+    product,
+    duration,
+    price: Number(price)
+  });
 
-  render();
-
-  $("#drawer").classList.add("show");
-
-  $("#overlay").classList.add("show");
-
+  updateCart();
+  openCartDrawer();
 }
 
 
-function closeCart(){
+/* =========================
+   ABRIR / CERRAR CARRITO
+========================= */
 
-  $("#drawer").classList.remove("show");
-
-  $("#overlay").classList.remove("show");
-
+function openCartDrawer() {
+  cartDrawer.classList.add("show");
+  cartOverlay.classList.add("show");
+  document.body.style.overflow = "hidden";
 }
 
+function closeCartDrawer() {
+  cartDrawer.classList.remove("show");
+  cartOverlay.classList.remove("show");
+  document.body.style.overflow = "";
+}
 
-document.querySelectorAll(".buy").forEach(button=>{
+openCart.addEventListener("click", openCartDrawer);
+closeCart.addEventListener("click", closeCartDrawer);
+cartOverlay.addEventListener("click", closeCartDrawer);
 
-  button.onclick = ()=>{
 
-    const product =
-      products[button.dataset.id];
+/* =========================
+   BOTONES COMPRAR
+========================= */
 
-    if(!product) return;
+document.querySelectorAll(".buy-button").forEach(button => {
 
-    cart.push(product);
+  button.addEventListener("click", () => {
 
-    openCart();
+    const product = button.dataset.product;
+    const duration = button.dataset.duration;
+    const price = button.dataset.price;
 
-  };
+    addToCart(product, duration, price);
+
+  });
 
 });
 
 
-$("#openCart").onclick = openCart;
+/* =========================
+   FILTROS
+========================= */
 
-$("#closeCart").onclick = closeCart;
+const tabs = document.querySelectorAll(".tab");
+const cards = document.querySelectorAll(".plan-card");
 
-$("#overlay").onclick = closeCart;
+tabs.forEach(tab => {
 
+  tab.addEventListener("click", () => {
 
-$("#clearCart").onclick = ()=>{
+    tabs.forEach(item => item.classList.remove("active"));
+    tab.classList.add("active");
 
-  cart = [];
+    const filter = tab.dataset.filter;
 
-  render();
+    cards.forEach(card => {
 
-};
+      if (filter === "all") {
+        card.classList.remove("hidden");
+        return;
+      }
 
+      const duration = card.dataset.duration;
 
-document
-  .querySelectorAll("#filters button")
-  .forEach(button=>{
+      if (duration === filter) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
 
-    button.onclick = ()=>{
-
-      document
-        .querySelectorAll("#filters button")
-        .forEach(item =>
-          item.classList.remove("active")
-        );
-
-      button.classList.add("active");
-
-
-      const filter =
-        button.dataset.filter;
-
-
-      document
-        .querySelectorAll(".plan")
-        .forEach(plan=>{
-
-          if(
-            filter === "all" ||
-            plan.dataset.days === filter
-          ){
-
-            plan.style.display = "";
-
-          }else{
-
-            plan.style.display = "none";
-
-          }
-
-        });
-
-    };
+    });
 
   });
 
-
-$("#payBtn").onclick = ()=>{
-
-  window.open(
-    "https://link.mercadopago.com.ar/pirunet",
-    "_blank"
-  );
-
-};
+});
 
 
-$("#waBtn").onclick = ()=>{
+/* =========================
+   MERCADO PAGO
+========================= */
 
-  if(!cart.length){
+mercadoPago.addEventListener("click", () => {
 
-    alert(
-      "Agregá al menos un plan al carrito."
-    );
-
+  if (cart.length === 0) {
+    alert("Agregá al menos un plan al carrito.");
     return;
-
   }
 
+  window.open(MERCADO_PAGO, "_blank");
 
-  const name =
-    $("#customerName").value.trim() ||
-    "No indicado";
-
-
-  const phone =
-    $("#customerPhone").value.trim() ||
-    "No indicado";
+});
 
 
-  const total =
-    cart.reduce(
-      (sum,product) =>
-        sum + product.price,
-      0
-    );
+/* =========================
+   WHATSAPP
+========================= */
 
+whatsappOrder.addEventListener("click", () => {
 
-  const productsText =
-    cart.map(product =>
-      `• ${product.name} — ${product.info} — ${money(product.price)}`
-    ).join("\n");
+  if (cart.length === 0) {
+    alert("Agregá al menos un plan al carrito.");
+    return;
+  }
 
+  const name = customerName.value.trim();
+  const phone = customerPhone.value.trim();
 
-  const message =
-`Hola PERSONALNET 👋
+  if (!name) {
+    alert("Ingresá tu nombre.");
+    customerName.focus();
+    return;
+  }
 
-Quiero realizar este pedido:
+  if (!phone) {
+    alert("Ingresá tu número de WhatsApp.");
+    customerPhone.focus();
+    return;
+  }
 
-${productsText}
+  let total = 0;
 
-Total: ${money(total)}
+  let message =
+    "Hola PERSONALNET 👋%0A%0A" +
+    "Quiero realizar una compra.%0A%0A" +
+    "*Datos del cliente*%0A" +
+    "Nombre: " + encodeURIComponent(name) + "%0A" +
+    "Teléfono: " + encodeURIComponent(phone) + "%0A%0A" +
+    "*Planes seleccionados*%0A";
 
-Nombre: ${name}
-Teléfono: ${phone}`;
+  cart.forEach((item, index) => {
 
+    total += Number(item.price);
+
+    message +=
+      "%0A" +
+      (index + 1) + ". " +
+      encodeURIComponent(item.product) +
+      "%0A" +
+      "Plan: " +
+      encodeURIComponent(item.duration) +
+      "%0A" +
+      "Precio: " +
+      encodeURIComponent(formatPrice(item.price));
+
+  });
+
+  message +=
+    "%0A%0A*TOTAL: " +
+    encodeURIComponent(formatPrice(total)) +
+    "*%0A%0A" +
+    "Quedo a la espera para continuar con la activación.";
 
   const url =
-    "https://wa.me/5493844546841?text=" +
-    encodeURIComponent(message);
+    "https://wa.me/" +
+    WHATSAPP +
+    "?text=" +
+    message;
+
+  window.open(url, "_blank");
+
+});
 
 
-  window.open(url,"_blank");
+/* =========================
+   VACIAR
+========================= */
 
-};
+clearCart.addEventListener("click", () => {
+
+  if (cart.length === 0) return;
+
+  const confirmClear =
+    confirm("¿Querés vaciar todo el carrito?");
+
+  if (!confirmClear) return;
+
+  cart = [];
+  updateCart();
+
+});
 
 
-render();
+/* =========================
+   ESCAPE
+========================= */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key === "Escape") {
+    closeCartDrawer();
+  }
+
+});
+
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&")
+    .replaceAll("<", "<")
+    .replaceAll(">", ">")
+    .replaceAll('"', """)
+    .replaceAll("'", "'");
+
+}
+
+
+/* =========================
+   INICIO
+========================= */
+
+updateCart();
