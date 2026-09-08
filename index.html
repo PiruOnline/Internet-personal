@@ -3,106 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="theme-color" content="#07070b">
   <title>PERSONALNET | Internet Argentina</title>
-  <meta name="description" content="Planes de Internet PERSONALNET para líneas Personal y Claro.">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-  <div class="ambient ambient-three"></div>
+  <div class="bg-glow glow1"></div>
+  <div class="bg-glow glow2"></div>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
+  <header class="navbar">
+    <a href="#" class="logo">
+      <span class="logo-dot"></span>
+      PERSONALNET
+    </a>
 
-      <a href="#inicio" class="brand">
-        <span class="brand-mark">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
+    <nav>
+      <a href="#planes">Planes</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
 
-        <span class="brand-text">
-          PERSONAL<span>NET</span>
-        </span>
-      </a>
-
-      <nav class="nav">
-        <a href="#planes">Planes</a>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a href="#preguntas">Preguntas</a>
-      </nav>
-
-      <button class="cart-button" id="openCart" type="button">
-        <span class="cart-icon">🛒</span>
-        <span>Mi pedido</span>
-        <b id="cartCount">0</b>
-      </button>
-
-    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 <span>Pedido</span>
+      <b id="cartCount">0</b>
+    </button>
   </header>
-
 
   <main>
 
-    <!-- HERO -->
-    <section class="hero" id="inicio">
-
-      <div class="hero-grid"></div>
+    <section class="hero">
 
       <div class="hero-content">
 
-        <div class="hero-pill">
-          <span class="status-dot"></span>
-          SERVICIO ACTIVO EN ARGENTINA
+        <div class="status">
+          <span></span>
+          SERVICIO ACTIVO · ARGENTINA
         </div>
 
         <h1>
-          Tu conexión.
-          <span>Tu forma.</span>
-          <strong>Tu PERSONALNET.</strong>
+          Internet a tu manera.
+          <strong>Simple. Rápido. Premium.</strong>
         </h1>
 
         <p>
-          Elegí tu plan, realizá el pedido y coordiná todo
-          directamente por WhatsApp.
+          Elegí tu servicio, seleccioná tu plan y realizá tu pedido
+          directamente desde PERSONALNET.
         </p>
 
-        <div class="hero-actions">
-          <a href="#planes" class="btn btn-primary">
-            Ver planes
-            <span>↓</span>
-          </a>
-
-          <a href="https://wa.me/5493844546841"
-             target="_blank"
-             rel="noopener"
-             class="btn btn-secondary">
-            WhatsApp
-            <span>↗</span>
+        <div class="hero-buttons">
+          <a href="#planes" class="btn primary">Ver planes <span>↓</span></a>
+          <a href="https://wa.me/5493844546841" class="btn secondary">
+            WhatsApp ↗
           </a>
         </div>
 
-        <div class="hero-trust">
-          <div>
-            <strong>3</strong>
-            <span>Servicios</span>
-          </div>
-
+        <div class="hero-stats">
           <div>
             <strong>8</strong>
             <span>Planes</span>
           </div>
-
+          <div>
+            <strong>3</strong>
+            <span>Servicios</span>
+          </div>
           <div>
             <strong>24/7</strong>
             <span>Pedidos</span>
@@ -111,49 +76,45 @@
 
       </div>
 
-      <div class="hero-visual">
+      <div class="hero-card">
 
-        <div class="orb orb-main"></div>
-        <div class="orb orb-small"></div>
-
-        <div class="signal-card">
-          <div class="signal-top">
-            <span>PERSONALNET</span>
-            <span class="live">● ONLINE</span>
-          </div>
-
-          <div class="signal-title">
-            Conectado
-          </div>
-
-          <div class="signal-bars">
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
-          </div>
-
-          <div class="signal-bottom">
-            <span>Argentina</span>
-            <span>● Estable</span>
-          </div>
-        </div>
-
-        <div class="floating-tag tag-one">
-          <span class="tag-icon purple">✦</span>
+        <div class="floating-card top">
+          <span class="mini-icon purple">C</span>
           <div>
             <b>CGLite</b>
             <small>Disponible</small>
           </div>
+          <i>●</i>
         </div>
 
-        <div class="floating-tag tag-two">
-          <span class="tag-icon green">⌁</span>
+        <div class="network-card">
+
+          <div class="network-top">
+            <span>PERSONALNET</span>
+            <span>ONLINE</span>
+          </div>
+
+          <div class="network-circle">
+            <div>
+              <span>●</span>
+              <strong>Activo</strong>
+            </div>
+          </div>
+
+          <div class="network-bottom">
+            <span>🇦🇷 Argentina</span>
+            <span>Conectado</span>
+          </div>
+
+        </div>
+
+        <div class="floating-card bottom">
+          <span class="mini-icon green">H</span>
           <div>
             <b>HTTP Custom</b>
             <small>Disponible</small>
           </div>
+          <i>●</i>
         </div>
 
       </div>
@@ -161,523 +122,325 @@
     </section>
 
 
-    <!-- SERVICES -->
-    <section class="services section">
+    <section class="services">
 
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">NUESTROS SERVICIOS</span>
-          <h2>Elegí cómo <span>conectarte.</span></h2>
-        </div>
-
-        <p>
-          Planes simples, claros y pensados para que puedas
-          elegir exactamente lo que necesitás.
-        </p>
+      <div class="section-title">
+        <span>01 · SERVICIOS</span>
+        <h2>Elegí tu conexión.</h2>
+        <p>Todo lo que necesitás, en un solo lugar.</p>
       </div>
-
 
       <div class="service-grid">
 
-        <!-- PERSONAL -->
-        <article class="service-card service-personal reveal">
+        <div class="service-card purple-card">
+          <div class="service-icon">C</div>
+          <span>LÍNEA PERSONAL</span>
+          <h3>CGLite <em>Personal</em></h3>
+          <p>Planes para líneas Personal con diferentes duraciones.</p>
+          <a href="#planes">Ver planes →</a>
+        </div>
 
-          <div class="service-glow"></div>
+        <div class="service-card red-card">
+          <div class="service-icon">C</div>
+          <span>LÍNEA CLARO</span>
+          <h3>CGLite <em>Claro AR</em></h3>
+          <p>Elegí la duración que mejor se adapte a vos.</p>
+          <a href="#planes">Ver planes →</a>
+        </div>
 
-          <div class="service-head">
-            <div class="service-icon personal-icon">P</div>
-
-            <span class="service-label">
-              LÍNEA PERSONAL
-            </span>
-          </div>
-
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="personal">Personal</span>
-          </h3>
-
-          <p>
-            Planes para líneas Personal.
-            Elegí la duración que preferís.
-          </p>
-
-          <a href="#planes" class="service-link">
-            Ver planes
-            <span>→</span>
-          </a>
-
-        </article>
-
-
-        <!-- CLARO -->
-        <article class="service-card service-claro reveal">
-
-          <div class="service-glow"></div>
-
-          <div class="service-head">
-            <div class="service-icon claro-icon">C</div>
-
-            <span class="service-label">
-              LÍNEA CLARO
-            </span>
-          </div>
-
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="claro">Claro AR</span>
-          </h3>
-
-          <p>
-            Planes para líneas Claro.
-            Diferentes duraciones para elegir.
-          </p>
-
-          <a href="#planes" class="service-link">
-            Ver planes
-            <span>→</span>
-          </a>
-
-        </article>
-
-
-        <!-- HTTP -->
-        <article class="service-card service-http reveal">
-
-          <div class="service-glow"></div>
-
-          <div class="service-head">
-            <div class="service-icon http-icon">H</div>
-
-            <span class="service-label">
-              CONEXIÓN FLEXIBLE
-            </span>
-          </div>
-
-          <h3>
-            <span class="http">HTTP Custom</span>
-            <span class="personal">Personal</span>
-          </h3>
-
-          <p>
-            Elegí entre 1 o 2 dispositivos
-            durante 30 días.
-          </p>
-
-          <a href="#planes" class="service-link">
-            Ver planes
-            <span>→</span>
-          </a>
-
-        </article>
+        <div class="service-card green-card">
+          <div class="service-icon">H</div>
+          <span>CONEXIÓN FLEXIBLE</span>
+          <h3>HTTP Custom <em>Personal</em></h3>
+          <p>Opciones para 1 o 2 dispositivos durante 30 días.</p>
+          <a href="#planes">Ver planes →</a>
+        </div>
 
       </div>
 
     </section>
 
 
-    <!-- PLANS -->
-    <section class="plans section" id="planes">
+    <section id="planes" class="plans-section">
 
-      <div class="section-heading plans-heading">
+      <div class="plans-heading">
 
         <div>
-          <span class="eyebrow">PLANES DISPONIBLES</span>
-          <h2>Elegí tu <span>plan ideal.</span></h2>
+          <span>02 · PLANES</span>
+          <h2>Elegí tu plan.</h2>
+          <p>Precios claros. Sin vueltas.</p>
         </div>
 
-        <div class="filter-wrap">
-
-          <button class="filter active" data-filter="all">
-            Todos
-          </button>
-
-          <button class="filter" data-filter="7">
-            7 días
-          </button>
-
-          <button class="filter" data-filter="15">
-            15 días
-          </button>
-
-          <button class="filter" data-filter="30">
-            30 días
-          </button>
-
+        <div class="filters">
+          <button class="filter active" data-filter="all">Todos</button>
+          <button class="filter" data-filter="7">7 días</button>
+          <button class="filter" data-filter="15">15 días</button>
+          <button class="filter" data-filter="30">30 días</button>
         </div>
 
       </div>
 
 
-      <div class="plans-grid" id="plansGrid">
+      <div class="plans-grid">
 
-        <!-- CGLITE PERSONAL 7 -->
-        <article class="plan-card reveal" data-days="7">
 
-          <div class="plan-top">
-            <span class="mini-badge purple-badge">
-              CGLite
-            </span>
+        <!-- PERSONAL 7 -->
 
-            <span class="duration">
-              7 días
-            </span>
+        <article class="plan purple-plan" data-days="7">
+
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">7 DÍAS</span>
           </div>
 
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="personal">Personal</span>
-          </h3>
+          <h3>CGLite <strong>Personal</strong></h3>
 
-          <p class="plan-description">
-            Línea Personal
-          </p>
+          <p class="plan-desc">Línea Personal</p>
 
           <div class="price">
             <small>$</small>4.500
           </div>
 
-          <div class="price-info">
-            $643 aprox. por día
-          </div>
+          <div class="daily">$643 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 7 días</li>
             <li>✓ Línea Personal</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-personal-7">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('personal7')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
-        <!-- CGLITE PERSONAL 15 -->
-        <article class="plan-card reveal" data-days="15">
+        <!-- PERSONAL 15 -->
 
-          <div class="plan-top">
-            <span class="mini-badge purple-badge">
-              CGLite
-            </span>
+        <article class="plan purple-plan" data-days="15">
 
-            <span class="duration">
-              15 días
-            </span>
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">15 DÍAS</span>
           </div>
 
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="personal">Personal</span>
-          </h3>
+          <h3>CGLite <strong>Personal</strong></h3>
 
-          <p class="plan-description">
-            Línea Personal
-          </p>
+          <p class="plan-desc">Línea Personal</p>
 
           <div class="price">
             <small>$</small>6.000
           </div>
 
-          <div class="price-info">
-            $400 aprox. por día
-          </div>
+          <div class="daily">$400 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 15 días</li>
             <li>✓ Línea Personal</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-personal-15">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('personal15')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
-        <!-- CGLITE PERSONAL 30 -->
-        <article class="plan-card featured reveal" data-days="30">
+        <!-- PERSONAL 30 -->
 
-          <div class="popular">
-            MÁS ELEGIDO
+        <article class="plan purple-plan featured" data-days="30">
+
+          <div class="badge">MÁS ELEGIDO</div>
+
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">30 DÍAS</span>
           </div>
 
-          <div class="plan-top">
-            <span class="mini-badge purple-badge">
-              CGLite
-            </span>
+          <h3>CGLite <strong>Personal</strong></h3>
 
-            <span class="duration">
-              30 días
-            </span>
-          </div>
-
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="personal">Personal</span>
-          </h3>
-
-          <p class="plan-description">
-            Línea Personal
-          </p>
+          <p class="plan-desc">Línea Personal</p>
 
           <div class="price">
             <small>$</small>8.000
           </div>
 
-          <div class="price-info">
-            $267 aprox. por día
-          </div>
+          <div class="daily">$267 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 30 días</li>
             <li>✓ Línea Personal</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-personal-30">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('personal30')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
-        <!-- CGLITE CLARO 7 -->
-        <article class="plan-card reveal" data-days="7">
+        <!-- CLARO 7 -->
 
-          <div class="plan-top">
-            <span class="mini-badge red-badge">
-              CGLite
-            </span>
+        <article class="plan red-plan" data-days="7">
 
-            <span class="duration">
-              7 días
-            </span>
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">7 DÍAS</span>
           </div>
 
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="claro">Claro AR</span>
-          </h3>
+          <h3>CGLite <strong>Claro AR</strong></h3>
 
-          <p class="plan-description">
-            Línea Claro
-          </p>
+          <p class="plan-desc">Línea Claro</p>
 
           <div class="price">
             <small>$</small>4.500
           </div>
 
-          <div class="price-info">
-            $643 aprox. por día
-          </div>
+          <div class="daily">$643 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 7 días</li>
             <li>✓ Línea Claro</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-claro-7">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('claro7')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
-        <!-- CGLITE CLARO 15 -->
-        <article class="plan-card reveal" data-days="15">
+        <!-- CLARO 15 -->
 
-          <div class="plan-top">
-            <span class="mini-badge red-badge">
-              CGLite
-            </span>
+        <article class="plan red-plan" data-days="15">
 
-            <span class="duration">
-              15 días
-            </span>
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">15 DÍAS</span>
           </div>
 
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="claro">Claro AR</span>
-          </h3>
+          <h3>CGLite <strong>Claro AR</strong></h3>
 
-          <p class="plan-description">
-            Línea Claro
-          </p>
+          <p class="plan-desc">Línea Claro</p>
 
           <div class="price">
             <small>$</small>6.000
           </div>
 
-          <div class="price-info">
-            $400 aprox. por día
-          </div>
+          <div class="daily">$400 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 15 días</li>
             <li>✓ Línea Claro</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-claro-15">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('claro15')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
-        <!-- CGLITE CLARO 30 -->
-        <article class="plan-card featured-red reveal" data-days="30">
+        <!-- CLARO 30 -->
 
-          <div class="popular">
-            MÁS ELEGIDO
+        <article class="plan red-plan featured" data-days="30">
+
+          <div class="badge">MÁS ELEGIDO</div>
+
+          <div class="plan-head">
+            <span class="service-label">CGLite</span>
+            <span class="duration">30 DÍAS</span>
           </div>
 
-          <div class="plan-top">
-            <span class="mini-badge red-badge">
-              CGLite
-            </span>
+          <h3>CGLite <strong>Claro AR</strong></h3>
 
-            <span class="duration">
-              30 días
-            </span>
-          </div>
-
-          <h3>
-            <span class="cglite">CGLite</span>
-            <span class="claro">Claro AR</span>
-          </h3>
-
-          <p class="plan-description">
-            Línea Claro
-          </p>
+          <p class="plan-desc">Línea Claro</p>
 
           <div class="price">
             <small>$</small>8.000
           </div>
 
-          <div class="price-info">
-            $267 aprox. por día
-          </div>
+          <div class="daily">$267 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ Plan de 30 días</li>
             <li>✓ Línea Claro</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="cg-claro-30">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('claro30')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
         <!-- HTTP 1 -->
-        <article class="plan-card http-plan reveal" data-days="30">
 
-          <div class="plan-top">
-            <span class="mini-badge green-badge">
-              HTTP Custom
-            </span>
+        <article class="plan green-plan" data-days="30">
 
-            <span class="duration">
-              30 días
-            </span>
+          <div class="plan-head">
+            <span class="service-label">HTTP Custom</span>
+            <span class="duration">30 DÍAS</span>
           </div>
 
-          <h3>
-            <span class="http">HTTP Custom</span>
-            <span class="personal">Personal</span>
-          </h3>
+          <h3>HTTP Custom <strong>Personal</strong></h3>
 
-          <p class="plan-description">
-            1 dispositivo
-          </p>
+          <p class="plan-desc">1 dispositivo</p>
 
           <div class="price">
             <small>$</small>7.000
           </div>
 
-          <div class="price-info">
-            $233 aprox. por día
-          </div>
+          <div class="daily">$233 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ 30 días</li>
             <li>✓ 1 dispositivo</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="http-1">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('http1')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
 
 
         <!-- HTTP 2 -->
-        <article class="plan-card http-plan featured-green reveal" data-days="30">
 
-          <div class="popular">
-            MÁS VENDIDO
+        <article class="plan green-plan featured" data-days="30">
+
+          <div class="badge">MÁS VENDIDO</div>
+
+          <div class="plan-head">
+            <span class="service-label">HTTP Custom</span>
+            <span class="duration">30 DÍAS</span>
           </div>
 
-          <div class="plan-top">
-            <span class="mini-badge green-badge">
-              HTTP Custom
-            </span>
+          <h3>HTTP Custom <strong>Personal</strong></h3>
 
-            <span class="duration">
-              30 días
-            </span>
-          </div>
-
-          <h3>
-            <span class="http">HTTP Custom</span>
-            <span class="personal">Personal</span>
-          </h3>
-
-          <p class="plan-description">
-            2 dispositivos
-          </p>
+          <p class="plan-desc">2 dispositivos</p>
 
           <div class="price">
             <small>$</small>12.000
           </div>
 
-          <div class="price-info">
-            $400 aprox. por día
-          </div>
+          <div class="daily">$400 aprox. por día</div>
 
-          <ul class="features">
+          <ul>
             <li>✓ 30 días</li>
             <li>✓ 2 dispositivos</li>
             <li>✓ Gestión por WhatsApp</li>
           </ul>
 
-          <button class="buy-button"
-                  data-product="http-2">
-            Comprar
-            <span>→</span>
+          <button onclick="addToCart('http2')" class="buy">
+            Comprar <span>→</span>
           </button>
 
         </article>
@@ -687,49 +450,35 @@
     </section>
 
 
-    <!-- PROCESS -->
-    <section class="process section" id="como-funciona">
+    <section id="como" class="steps">
 
-      <div class="section-heading center">
-        <span class="eyebrow">PROCESO SIMPLE</span>
-        <h2>Comprar es <span>muy fácil.</span></h2>
-        <p>
-          Elegís tu plan y nosotros nos encargamos del resto.
-        </p>
+      <div class="section-title">
+        <span>03 · PROCESO</span>
+        <h2>Comprar es simple.</h2>
+        <p>En tres pasos tenés tu pedido listo.</p>
       </div>
 
+      <div class="step-grid">
 
-      <div class="steps">
-
-        <div class="step reveal">
-          <span class="step-number">01</span>
-          <div class="step-icon">⌁</div>
+        <div class="step">
+          <b>01</b>
+          <span>01</span>
           <h3>Elegí tu plan</h3>
-          <p>
-            Seleccioná el servicio y la duración que necesitás.
-          </p>
+          <p>Seleccioná el servicio y duración que necesitás.</p>
         </div>
 
-        <div class="step-line"></div>
-
-        <div class="step reveal">
-          <span class="step-number">02</span>
-          <div class="step-icon">🛒</div>
+        <div class="step">
+          <b>02</b>
+          <span>02</span>
           <h3>Armá tu pedido</h3>
-          <p>
-            Agregá uno o varios planes a tu carrito.
-          </p>
+          <p>Agregá uno o varios planes a tu carrito.</p>
         </div>
 
-        <div class="step-line"></div>
-
-        <div class="step reveal">
-          <span class="step-number">03</span>
-          <div class="step-icon">✓</div>
+        <div class="step">
+          <b>03</b>
+          <span>03</span>
           <h3>Confirmá</h3>
-          <p>
-            Completá tus datos y enviá el pedido por WhatsApp.
-          </p>
+          <p>Completá tus datos y enviá el pedido.</p>
         </div>
 
       </div>
@@ -737,128 +486,33 @@
     </section>
 
 
-    <!-- APP DOWNLOADS -->
-    <section class="apps section">
+    <section id="faq" class="faq">
 
-      <div class="app-banner">
-
-        <div class="app-copy">
-          <span class="eyebrow">APLICACIONES</span>
-
-          <h2>
-            Tené tu aplicación
-            <span>lista.</span>
-          </h2>
-
-          <p>
-            Descargá la aplicación correspondiente
-            antes de realizar tu pedido.
-          </p>
-        </div>
-
-        <div class="app-actions">
-
-          <a class="download-card"
-             href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
-             target="_blank"
-             rel="noopener">
-
-            <span class="download-icon purple-icon">C</span>
-
-            <span>
-              <small>DESCARGAR</small>
-              <strong>CGLite</strong>
-            </span>
-
-            <b>↗</b>
-
-          </a>
-
-
-          <a class="download-card"
-             href="https://play.google.com/store/apps/details?id=xyz.easypro.httpcustom"
-             target="_blank"
-             rel="noopener">
-
-            <span class="download-icon green-icon">H</span>
-
-            <span>
-              <small>GOOGLE PLAY</small>
-              <strong>HTTP Custom</strong>
-            </span>
-
-            <b>↗</b>
-
-          </a>
-
-        </div>
-
+      <div class="section-title">
+        <span>04 · AYUDA</span>
+        <h2>Preguntas frecuentes.</h2>
       </div>
-
-    </section>
-
-
-    <!-- FAQ -->
-    <section class="faq section" id="preguntas">
-
-      <div class="section-heading center">
-        <span class="eyebrow">PREGUNTAS FRECUENTES</span>
-        <h2>¿Tenés alguna <span>duda?</span></h2>
-      </div>
-
 
       <div class="faq-list">
 
-        <details class="faq-item reveal">
-          <summary>
-            ¿Cómo realizo una compra?
-            <span>+</span>
-          </summary>
-
-          <p>
-            Elegí el plan que quieras, agregalo al carrito,
-            completá tu nombre y teléfono y enviá el pedido
-            por WhatsApp.
-          </p>
+        <details>
+          <summary>¿Cómo realizo una compra? <b>+</b></summary>
+          <p>Elegí un plan, agregalo al carrito, completá tus datos y enviá el pedido por WhatsApp.</p>
         </details>
 
-
-        <details class="faq-item reveal">
-          <summary>
-            ¿Puedo comprar más de un plan?
-            <span>+</span>
-          </summary>
-
-          <p>
-            Sí. Podés agregar varios planes al carrito
-            y enviar todo en un mismo pedido.
-          </p>
+        <details>
+          <summary>¿Puedo comprar varios planes? <b>+</b></summary>
+          <p>Sí. Podés agregar diferentes planes al carrito y realizar un único pedido.</p>
         </details>
 
-
-        <details class="faq-item reveal">
-          <summary>
-            ¿Cómo pago?
-            <span>+</span>
-          </summary>
-
-          <p>
-            Podés realizar el pago mediante Mercado Pago
-            utilizando el botón disponible en el carrito.
-          </p>
+        <details>
+          <summary>¿Cómo pago? <b>+</b></summary>
+          <p>Podés utilizar Mercado Pago desde el carrito de compra.</p>
         </details>
 
-
-        <details class="faq-item reveal">
-          <summary>
-            ¿Dónde recibo la atención?
-            <span>+</span>
-          </summary>
-
-          <p>
-            La coordinación del pedido se realiza directamente
-            por WhatsApp.
-          </p>
+        <details>
+          <summary>¿Dónde recibo atención? <b>+</b></summary>
+          <p>La coordinación del pedido se realiza directamente por WhatsApp.</p>
         </details>
 
       </div>
@@ -868,158 +522,83 @@
   </main>
 
 
-  <!-- FOOTER -->
-  <footer class="footer">
+  <footer>
 
-    <div class="footer-inner">
+    <div class="footer-logo">PERSONALNET</div>
 
-      <div>
-        <a href="#inicio" class="brand footer-brand">
-          <span class="brand-mark">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
+    <p>Soluciones de conexión para Argentina.</p>
 
-          <span class="brand-text">
-            PERSONAL<span>NET</span>
-          </span>
-        </a>
-
-        <p>
-          Soluciones de conexión para Argentina.
-        </p>
-      </div>
-
-      <div class="footer-links">
-        <a href="#planes">Planes</a>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a href="#preguntas">Preguntas</a>
-        <a href="https://www.instagram.com/cergio.oficial__/"
-           target="_blank"
-           rel="noopener">
-          Instagram
-        </a>
-      </div>
-
+    <div class="footer-links">
+      <a href="#planes">Planes</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#faq">Preguntas</a>
+      <a href="https://www.instagram.com/cergio.oficial__/">Instagram</a>
     </div>
 
-    <div class="footer-bottom">
-      <span>© 2026 PERSONALNET</span>
-      <span>Hecho para Argentina 🇦🇷</span>
-    </div>
+    <small>© 2026 PERSONALNET · Hecho para Argentina 🇦🇷</small>
 
   </footer>
 
 
-  <!-- CART OVERLAY -->
-  <div class="cart-overlay" id="cartOverlay"></div>
-
-
   <!-- CART -->
-  <aside class="cart" id="cart">
+
+  <div id="overlay" class="overlay" onclick="closeCart()"></div>
+
+  <aside id="cart" class="cart">
 
     <div class="cart-header">
-
       <div>
-        <span class="eyebrow">TU PEDIDO</span>
-        <h2>Carrito</h2>
+        <span>PERSONALNET</span>
+        <h2>Tu pedido</h2>
       </div>
 
-      <button id="closeCart" class="close-cart" type="button">
-        ×
-      </button>
-
+      <button onclick="closeCart()">×</button>
     </div>
 
+    <div id="cartItems" class="cart-items">
+      <div class="empty">
+        <div>🛒</div>
+        <h3>Tu carrito está vacío</h3>
+        <p>Agregá un plan para comenzar.</p>
+      </div>
+    </div>
 
-    <div class="cart-body">
+    <div class="cart-bottom">
 
-      <div id="cartItems" class="cart-items">
-        <div class="empty-cart">
-          <div class="empty-icon">🛒</div>
-          <h3>Tu carrito está vacío</h3>
-          <p>
-            Agregá un plan para comenzar tu pedido.
-          </p>
-        </div>
+      <div class="total">
+        <span>Total</span>
+        <strong id="cartTotal">$0</strong>
       </div>
 
+      <input id="customerName" type="text" placeholder="Tu nombre">
+      <input id="customerPhone" type="tel" placeholder="Tu número">
 
-      <div class="checkout">
+      <a
+        href="https://link.mercadopago.com.ar/pirunet"
+        target="_blank"
+        class="payment">
+        💳 Pagar con Mercado Pago
+      </a>
 
-        <div class="checkout-total">
-          <span>Total</span>
-          <strong id="cartTotal">$0</strong>
-        </div>
+      <button class="whatsapp" onclick="sendWhatsApp()">
+        WhatsApp · Enviar pedido
+      </button>
 
-
-        <div class="checkout-form">
-
-          <label>
-            Nombre
-            <input
-              type="text"
-              id="customerName"
-              placeholder="Tu nombre"
-              autocomplete="name">
-          </label>
-
-          <label>
-            Teléfono
-            <input
-              type="tel"
-              id="customerPhone"
-              placeholder="Tu número"
-              autocomplete="tel">
-          </label>
-
-        </div>
-
-
-        <a
-          href="https://link.mercadopago.com.ar/pirunet"
-          target="_blank"
-          rel="noopener"
-          class="checkout-button mercado">
-          <span>💳</span>
-          Pagar con Mercado Pago
-        </a>
-
-
-        <button
-          id="whatsappButton"
-          type="button"
-          class="checkout-button whatsapp">
-          <span>◉</span>
-          Enviar pedido por WhatsApp
-        </button>
-
-
-        <button
-          id="clearCart"
-          type="button"
-          class="clear-button">
-          Vaciar carrito
-        </button>
-
-      </div>
+      <button class="clear" onclick="clearCart()">
+        Vaciar carrito
+      </button>
 
     </div>
 
   </aside>
 
 
-  <!-- TOAST -->
-  <div class="toast" id="toast">
-    <span class="toast-icon">✓</span>
-
-    <div>
-      <strong>Agregado al pedido</strong>
-      <small id="toastText">Plan agregado correctamente.</small>
-    </div>
+  <div id="toast" class="toast">
+    <span>✓</span>
+    Plan agregado al pedido
   </div>
 
+  <a class="float-wa" href="https://wa.me/5493844546841">◉</a>
 
   <script src="script.js"></script>
 
