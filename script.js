@@ -1,334 +1,156 @@
-const products = {
-
-  personal7:{
-    name:"CGLite Personal",
-    info:"7 días · Línea Personal",
-    price:4500
-  },
-
-  personal15:{
-    name:"CGLite Personal",
-    info:"15 días · Línea Personal",
-    price:6000
-  },
-
-  personal30:{
-    name:"CGLite Personal",
-    info:"30 días · Línea Personal",
-    price:8000
-  },
-
-  claro7:{
-    name:"CGLite Claro AR",
-    info:"7 días · Línea Claro",
-    price:4500
-  },
-
-  claro15:{
-    name:"CGLite Claro AR",
-    info:"15 días · Línea Claro",
-    price:6000
-  },
-
-  claro30:{
-    name:"CGLite Claro AR",
-    info:"30 días · Línea Claro",
-    price:8000
-  },
-
-  http1:{
-    name:"HTTP Custom Personal",
-    info:"30 días · 1 dispositivo",
-    price:7000
-  },
-
-  http2:{
-    name:"HTTP Custom Personal",
-    info:"30 días · 2 dispositivos",
-    price:12000
-  }
-
+const products={
+"cg-personal-7":{name:"CGLite",line:"Personal",info:"7 días · Línea Personal",price:4500},
+"cg-personal-15":{name:"CGLite",line:"Personal",info:"15 días · Línea Personal",price:6000},
+"cg-personal-30":{name:"CGLite",line:"Personal",info:"30 días · Línea Personal",price:8000},
+"cg-claro-7":{name:"CGLite",line:"Claro AR",info:"7 días · Línea Claro",price:4500},
+"cg-claro-15":{name:"CGLite",line:"Claro AR",info:"15 días · Línea Claro",price:6000},
+"cg-claro-30":{name:"CGLite",line:"Claro AR",info:"30 días · Línea Claro",price:8000},
+"http-1":{name:"HTTP Custom",line:"Personal",info:"30 días · 1 dispositivo",price:7000},
+"http-2":{name:"HTTP Custom",line:"Personal",info:"30 días · 2 dispositivos",price:13000}
 };
 
+let cart=JSON.parse(localStorage.getItem("personalnet_cart")||"[]");
 
-let cart = [];
+const $=s=>document.querySelector(s);
+const money=n=>"$"+n.toLocaleString("es-AR");
 
+function save(){localStorage.setItem("personalnet_cart",JSON.stringify(cart))}
 
-function money(value){
-
-  return "$" + value.toLocaleString("es-AR");
-
+function total(){
+return cart.reduce((s,x)=>s+x.price,0)
 }
 
-
-function addToCart(id){
-
-  cart.push(id);
-
-  updateCart();
-
-  openCart();
-
-  showToast();
-
+function toast(t){
+$("#toastText").textContent=t;
+$("#toast").classList.add("show");
+setTimeout(()=>$("#toast").classList.remove("show"),2200)
 }
 
+function render(){
 
-function removeItem(index){
+$("#cartCount").textContent=cart.length;
+$("#cartTotal").textContent=money(total());
 
-  cart.splice(index,1);
-
-  updateCart();
-
+if(!cart.length){
+$("#cartItems").innerHTML="";
+$("#emptyCart").style.display="block";
+return
 }
 
+$("#emptyCart").style.display="none";
 
-function clearCart(){
-
-  cart = [];
-
-  updateCart();
-
+$("#cartItems").innerHTML=cart.map((x,i)=>`
+<div class="cart-item">
+<div class="cart-item-top">
+<strong>${x.name} · ${x.line}</strong>
+<b>${money(x.price)}</b>
+</div>
+<small>${x.info}</small>
+<button class="remove" onclick="removeItem(${i})">Eliminar</button>
+</div>
+`).join("")
 }
 
-
-function updateCart(){
-
-  const container = document.getElementById("cartItems");
-  const count = document.getElementById("cartCount");
-  const total = document.getElementById("cartTotal");
-
-  count.textContent = cart.length;
-
-  if(cart.length === 0){
-
-    container.innerHTML = `
-      <div class="empty">
-        <div>🛒</div>
-        <h3>Tu carrito está vacío</h3>
-        <p>Agregá un plan para comenzar.</p>
-      </div>
-    `;
-
-    total.textContent = "$0";
-
-    return;
-
-  }
-
-
-  let totalPrice = 0;
-
-  container.innerHTML = cart.map((id,index)=>{
-
-    const item = products[id];
-
-    totalPrice += item.price;
-
-    return `
-      <div class="cart-item">
-
-        <div>
-          <strong>${item.name}</strong>
-          <small>${item.info}</small>
-        </div>
-
-        <div>
-          <strong>${money(item.price)}</strong>
-          <button onclick="removeItem(${index})">Eliminar</button>
-        </div>
-
-      </div>
-    `;
-
-  }).join("");
-
-
-  total.textContent = money(totalPrice);
-
+function add(id){
+if(!products[id])return;
+cart.push(products[id]);
+save();
+render();
+toast("Plan agregado al carrito ✓");
+openCart()
 }
 
+function removeItem(i){
+cart.splice(i,1);
+save();
+render();
+toast("Plan eliminado");
+}
 
 function openCart(){
-
-  document.getElementById("cart").classList.add("active");
-
-  document.getElementById("overlay").classList.add("active");
-
+$("#cartDrawer").classList.add("open");
+$("#overlay").classList.add("show");
 }
-
 
 function closeCart(){
-
-  document.getElementById("cart").classList.remove("active");
-
-  document.getElementById("overlay").classList.remove("active");
-
+$("#cartDrawer").classList.remove("open");
+$("#overlay").classList.remove("show");
 }
 
+document.querySelectorAll(".buy").forEach(b=>{
+b.addEventListener("click",()=>add(b.dataset.product))
+});
 
-function showToast(){
+$("#openCart").onclick=openCart;
+$("#closeCart").onclick=closeCart;
+$("#overlay").onclick=closeCart;
 
-  const toast = document.getElementById("toast");
+$("#clearCart").onclick=()=>{
+if(!cart.length)return;
+cart=[];
+save();
+render();
+toast("Carrito vaciado");
+};
 
-  toast.classList.add("show");
+document.querySelectorAll(".filter").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
 
-  setTimeout(()=>{
-    toast.classList.remove("show");
-  },1800);
+const f=btn.dataset.filter;
 
+document.querySelectorAll(".plan").forEach(p=>{
+p.style.display=f==="all"||p.dataset.days===f?"grid":"none"
+})
+}
+});
+
+$("#mercadoPago").onclick=()=>{
+if(!cart.length){
+toast("Agregá un plan primero");
+return
+}
+window.open("https://link.mercadopago.com.ar/pirunet","_blank")
+};
+
+$("#whatsappOrder").onclick=()=>{
+
+if(!cart.length){
+toast("Agregá un plan primero");
+return
 }
 
+const name=$("#customerName").value.trim();
+const phone=$("#customerPhone").value.trim();
 
-function sendWhatsApp(){
+if(!name||!phone){
+toast("Completá nombre y teléfono");
+return
+}
 
-  if(cart.length === 0){
-
-    alert("Agregá al menos un plan al pedido.");
-
-    return;
-
-  }
-
-
-  const name =
-    document.getElementById("customerName").value.trim();
-
-  const phone =
-    document.getElementById("customerPhone").value.trim();
-
-
-  if(!name){
-
-    alert("Ingresá tu nombre.");
-
-    return;
-
-  }
-
-
-  if(!phone){
-
-    alert("Ingresá tu número de teléfono.");
-
-    return;
-
-  }
-
-
-  let total = 0;
-
-  let message =
-`Hola PERSONALNET 👋
+let msg=`Hola PERSONALNET 👋
 
 Quiero realizar este pedido:
 
 `;
 
-
-  cart.forEach(id=>{
-
-    const item = products[id];
-
-    total += item.price;
-
-    message +=
-`• ${item.name} — ${item.info} — ${money(item.price)}
-`;
-
-  });
-
-
-  message +=
+cart.forEach(x=>{
+msg+=`• ${x.name} ${x.line} — ${x.info} — ${money(x.price)}
 `
+});
+
+msg+=`
 ━━━━━━━━━━━━━━
+Total: ${money(total())}
 
-Total: ${money(total)}
 Nombre: ${name}
-Teléfono: ${phone}
+Teléfono: ${phone}`;
 
-Quedo atento/a. Gracias.`;
+window.open(
+"https://wa.me/5493844546841?text="+encodeURIComponent(msg),
+"_blank"
+)
+};
 
-
-  const url =
-    "https://wa.me/5493844546841?text=" +
-    encodeURIComponent(message);
-
-
-  window.open(url,"_blank");
-
-}
-
-
-/* FILTROS */
-
-document.querySelectorAll(".filter").forEach(button=>{
-
-  button.addEventListener("click",()=>{
-
-    document
-      .querySelectorAll(".filter")
-      .forEach(btn=>btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    const filter = button.dataset.filter;
-
-    document.querySelectorAll(".plan").forEach(plan=>{
-
-      const days = plan.dataset.days;
-
-      if(filter === "all" || days === filter){
-
-        plan.style.display = "";
-
-      }else{
-
-        plan.style.display = "none";
-
-      }
-
-    });
-
-  });
-
-});
-
-
-/* REVEAL */
-
-const observer =
-new IntersectionObserver(
-(entries)=>{
-
-  entries.forEach(entry=>{
-
-    if(entry.isIntersecting){
-
-      entry.target.style.opacity = "1";
-      entry.target.style.transform = "translateY(0)";
-
-    }
-
-  });
-
-},
-{
-  threshold:.08
-});
-
-
-document
-  .querySelectorAll(".service-card,.plan,.step,details")
-  .forEach(el=>{
-
-    el.style.opacity = "0";
-    el.style.transform = "translateY(20px)";
-    el.style.transition = "opacity .6s ease, transform .6s ease";
-
-    observer.observe(el);
-
-  });
-
-
-updateCart();
+render();
