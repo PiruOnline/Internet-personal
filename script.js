@@ -1,7 +1,19 @@
+"use strict";
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+
 const MP_LINK = "https://link.mercadopago.com.ar/pirunet";
 const ADMIN_WHATSAPP = "5493844546841";
 
+
+/* =========================
+   ESTADO
+========================= */
+
 let cart = [];
+
 let customer = {
   name: "",
   phone: ""
@@ -12,21 +24,19 @@ let customer = {
    ELEMENTOS
 ========================= */
 
-const cartOverlay = document.getElementById("cartOverlay");
-const afterOverlay = document.getElementById("afterOverlay");
+let cartOverlay;
+let afterOverlay;
+let cartItems;
+let cartCount;
+let cartTotal;
+let emptyCart;
+let cartBottom;
+let cartError;
+let customerName;
+let customerPhone;
+let sendWhatsApp;
 
-const cartItems = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-
-const emptyCart = document.getElementById("emptyCart");
-const cartBottom = document.getElementById("cartBottom");
-const cartError = document.getElementById("cartError");
-
-const customerName = document.getElementById("customerName");
-const customerPhone = document.getElementById("customerPhone");
-
-const sendWhatsApp = document.getElementById("sendWhatsApp");
+let toastTimer = null;
 
 
 /* =========================
@@ -61,7 +71,10 @@ function normalizePhone(phone) {
 
 function saveCart() {
   try {
-    localStorage.setItem("personalnet_cart", JSON.stringify(cart));
+    localStorage.setItem(
+      "personalnet_cart",
+      JSON.stringify(cart)
+    );
   } catch (error) {
     console.warn("No se pudo guardar el carrito.", error);
   }
@@ -80,7 +93,13 @@ function loadCart() {
 
     const parsed = JSON.parse(saved);
 
-    cart = Array.isArray(parsed) ? parsed : [];
+    cart = Array.isArray(parsed)
+      ? parsed.filter(item =>
+          item &&
+          typeof item.name === "string" &&
+          Number(item.price) >= 0
+        )
+      : [];
 
   } catch (error) {
     cart = [];
@@ -92,13 +111,17 @@ function loadCart() {
 
 function loadCustomer() {
   try {
-    const saved = localStorage.getItem("personalnet_customer");
+    const saved = localStorage.getItem(
+      "personalnet_customer"
+    );
 
     if (!saved) return;
 
     const parsed = JSON.parse(saved);
 
-    if (!parsed || typeof parsed !== "object") return;
+    if (!parsed || typeof parsed !== "object") {
+      return;
+    }
 
     customer = {
       name: parsed.name || "",
@@ -114,7 +137,9 @@ function loadCustomer() {
     }
 
   } catch (error) {
-    console.warn("No se pudieron cargar los datos del cliente.");
+    console.warn(
+      "No se pudieron cargar los datos del cliente."
+    );
   }
 }
 
@@ -125,15 +150,26 @@ function loadCustomer() {
 
 function addToCart(name, price) {
 
-  const existing = cart.find(item => item.name === name);
+  const numericPrice = Number(price);
+
+  if (!name || !Number.isFinite(numericPrice)) {
+    return;
+  }
+
+  const existing = cart.find(
+    item => item.name === name
+  );
 
   if (existing) {
-    existing.quantity += 1;
+    existing.quantity =
+      Math.max(1, Number(existing.quantity) || 1) + 1;
   } else {
     cart.push({
-      id: Date.now() + Math.random(),
-      name,
-      price: Number(price),
+      id: `${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2)}`,
+      name: name,
+      price: numericPrice,
       quantity: 1
     });
   }
@@ -147,14 +183,20 @@ function addToCart(name, price) {
 
 function changeQuantity(id, amount) {
 
-  const item = cart.find(product => String(product.id) === String(id));
+  const item = cart.find(
+    product => String(product.id) === String(id)
+  );
 
   if (!item) return;
 
-  item.quantity += amount;
+  item.quantity =
+    Math.max(0, Number(item.quantity) || 0) +
+    Number(amount || 0);
 
   if (item.quantity <= 0) {
-    cart = cart.filter(product => String(product.id) !== String(id));
+    cart = cart.filter(
+      product => String(product.id) !== String(id)
+    );
   }
 
   saveCart();
@@ -188,7 +230,9 @@ function clearCart() {
 
 function renderCart() {
 
-  if (!cartItems || !cartCount || !cartTotal) return;
+  if (!cartItems || !cartCount || !cartTotal) {
+    return;
+  }
 
   cartItems.innerHTML = "";
 
@@ -197,13 +241,17 @@ function renderCart() {
 
   cart.forEach(item => {
 
-    const quantity = Math.max(1, Number(item.quantity) || 1);
-    const price = Number(item.price) || 0;
+    const quantity =
+      Math.max(1, Number(item.quantity) || 1);
+
+    const price =
+      Math.max(0, Number(item.price) || 0);
 
     total += price * quantity;
     count += quantity;
 
-    const element = document.createElement("div");
+    const element =
+      document.createElement("div");
 
     element.className = "cart-item";
 
@@ -224,17 +272,21 @@ function renderCart() {
           class="qty-btn"
           type="button"
           onclick="changeQuantity('${String(item.id)}', -1)"
-          aria-label="Disminuir cantidad">
+          aria-label="Disminuir cantidad"
+        >
           −
         </button>
 
-        <span class="qty">${quantity}</span>
+        <span class="qty">
+          ${quantity}
+        </span>
 
         <button
           class="qty-btn"
           type="button"
           onclick="changeQuantity('${String(item.id)}', 1)"
-          aria-label="Aumentar cantidad">
+          aria-label="Aumentar cantidad"
+        >
           +
         </button>
 
@@ -242,7 +294,8 @@ function renderCart() {
           class="remove-btn"
           type="button"
           onclick="removeItem('${String(item.id)}')"
-          aria-label="Eliminar producto">
+          aria-label="Eliminar producto"
+        >
           ×
         </button>
 
@@ -252,10 +305,8 @@ function renderCart() {
     cartItems.appendChild(element);
   });
 
-
   cartCount.textContent = count;
   cartTotal.textContent = money(total);
-
 
   if (cart.length === 0) {
 
@@ -289,9 +340,17 @@ function openCart() {
   if (!cartOverlay) return;
 
   cartOverlay.classList.add("show");
-  cartOverlay.setAttribute("aria-hidden", "false");
+
+  cartOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
   document.body.classList.add("locked");
+
+  setTimeout(() => {
+    customerName?.focus();
+  }, 100);
 }
 
 
@@ -300,7 +359,11 @@ function closeCart() {
   if (!cartOverlay) return;
 
   cartOverlay.classList.remove("show");
-  cartOverlay.setAttribute("aria-hidden", "true");
+
+  cartOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
   if (!afterOverlay?.classList.contains("show")) {
     document.body.classList.remove("locked");
@@ -309,27 +372,34 @@ function closeCart() {
 
 
 /* =========================
-   MENSAJE DE AGREGADO
+   TOAST
 ========================= */
-
-let toastTimer = null;
-
 
 function showAddedMessage(name) {
 
-  const oldToast = document.querySelector(".toast");
+  const oldToast =
+    document.querySelector(".toast");
 
   if (oldToast) {
     oldToast.remove();
   }
 
-  const toast = document.createElement("div");
+  const container =
+    document.querySelector(".toast-container");
+
+  const toast =
+    document.createElement("div");
 
   toast.className = "toast";
 
-  toast.textContent = `${name} agregado al carrito`;
+  toast.textContent =
+    `${name} agregado al carrito`;
 
-  document.body.appendChild(toast);
+  if (container) {
+    container.appendChild(toast);
+  } else {
+    document.body.appendChild(toast);
+  }
 
   requestAnimationFrame(() => {
     toast.classList.add("show");
@@ -363,7 +433,11 @@ function requestTrial(service) {
   const url =
     `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
 }
 
 
@@ -374,29 +448,32 @@ function requestTrial(service) {
 function checkout() {
 
   if (!cart.length) {
+
     if (cartError) {
-      cartError.textContent = "Agregá al menos un producto.";
+      cartError.textContent =
+        "Agregá al menos un producto.";
     }
 
     return;
   }
 
+  const name =
+    customerName?.value.trim() || "";
 
-  const name = customerName?.value.trim() || "";
-  const phone = customerPhone?.value.trim() || "";
-
+  const phone =
+    customerPhone?.value.trim() || "";
 
   if (name.length < 2) {
 
     if (cartError) {
-      cartError.textContent = "Ingresá tu nombre.";
+      cartError.textContent =
+        "Ingresá tu nombre.";
     }
 
     customerName?.focus();
 
     return;
   }
-
 
   if (normalizePhone(phone).length < 8) {
 
@@ -410,12 +487,10 @@ function checkout() {
     return;
   }
 
-
   customer = {
     name,
     phone
   };
-
 
   try {
     localStorage.setItem(
@@ -423,18 +498,19 @@ function checkout() {
       JSON.stringify(customer)
     );
   } catch (error) {
-    console.warn("No se pudo guardar el cliente.");
+    console.warn(
+      "No se pudo guardar el cliente."
+    );
   }
 
-
-  const message = createOrderMessage();
-
+  const message =
+    createOrderMessage();
 
   const whatsappUrl =
     `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-
   try {
+
     localStorage.setItem(
       "personalnet_order",
       JSON.stringify(cart)
@@ -446,25 +522,34 @@ function checkout() {
     );
 
   } catch (error) {
-    console.warn("No se pudo guardar el pedido.");
+
+    console.warn(
+      "No se pudo guardar el pedido."
+    );
   }
 
+  /*
+    Abrimos Mercado Pago directamente
+    desde el click del usuario para reducir
+    el riesgo de bloqueo del navegador.
+  */
+  const paymentWindow =
+    window.open(
+      MP_LINK,
+      "_blank",
+      "noopener,noreferrer"
+    );
 
   /*
-    Abrimos Mercado Pago.
-    El usuario realiza el pago y después
-    vuelve al sitio para enviar el comprobante.
+    Si el navegador bloquea la ventana,
+    mostramos igualmente el enlace.
   */
-
-  window.open(
-    MP_LINK,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
+  if (!paymentWindow) {
+    window.location.href = MP_LINK;
+    return;
+  }
 
   closeCart();
-
 
   setTimeout(() => {
     showAfterPayment();
@@ -480,22 +565,26 @@ function createOrderMessage() {
 
   let total = 0;
 
-  let products = cart.map(item => {
+  const products =
+    cart.map(item => {
 
-    const quantity = Math.max(
-      1,
-      Number(item.quantity) || 1
-    );
+      const quantity =
+        Math.max(
+          1,
+          Number(item.quantity) || 1
+        );
 
-    const subtotal =
-      Number(item.price) * quantity;
+      const price =
+        Number(item.price) || 0;
 
-    total += subtotal;
+      const subtotal =
+        price * quantity;
 
-    return `• ${item.name} x${quantity} — ${money(subtotal)}`;
+      total += subtotal;
 
-  }).join("\n");
+      return `• ${item.name} x${quantity} — ${money(subtotal)}`;
 
+    }).join("\n");
 
   return `Hola! Quiero confirmar mi compra en PERSONALNET.
 
@@ -515,7 +604,7 @@ Ya realicé el pago y envío el comprobante por este medio.`;
 
 
 /* =========================
-   POST PAGO
+   DESPUÉS DEL PAGO
 ========================= */
 
 function showAfterPayment() {
@@ -525,24 +614,30 @@ function showAfterPayment() {
   let whatsappUrl = "";
 
   try {
+
     whatsappUrl =
-      localStorage.getItem("personalnet_order_wa") || "";
+      localStorage.getItem(
+        "personalnet_order_wa"
+      ) || "";
+
   } catch (error) {
+
     whatsappUrl = "";
   }
-
 
   if (sendWhatsApp) {
 
     sendWhatsApp.href =
       whatsappUrl ||
       `https://wa.me/${ADMIN_WHATSAPP}`;
-
   }
 
-
   afterOverlay.classList.add("show");
-  afterOverlay.setAttribute("aria-hidden", "false");
+
+  afterOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
   document.body.classList.add("locked");
 }
@@ -553,7 +648,11 @@ function closeAfterPayment() {
   if (!afterOverlay) return;
 
   afterOverlay.classList.remove("show");
-  afterOverlay.setAttribute("aria-hidden", "true");
+
+  afterOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
   if (!cartOverlay?.classList.contains("show")) {
     document.body.classList.remove("locked");
@@ -562,113 +661,294 @@ function closeAfterPayment() {
 
 
 /* =========================
+   FILTRO DE DURACIÓN
+========================= */
+
+function initDurationFilter() {
+
+  const buttons =
+    document.querySelectorAll(
+      ".duration-btn"
+    );
+
+  const cards =
+    document.querySelectorAll(
+      ".plan-card"
+    );
+
+  if (!buttons.length || !cards.length) {
+    return;
+  }
+
+  buttons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const duration =
+          button.dataset.duration;
+
+        buttons.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        cards.forEach(card => {
+
+          const cardDuration =
+            card.dataset.duration;
+
+          if (
+            duration === "all" ||
+            duration === cardDuration
+          ) {
+
+            card.classList.remove(
+              "is-hidden"
+            );
+
+          } else {
+
+            card.classList.add(
+              "is-hidden"
+            );
+          }
+
+        });
+      }
+    );
+  });
+}
+
+
+/* =========================
    EVENTOS
 ========================= */
 
-document.getElementById("openCart")?.addEventListener(
-  "click",
-  openCart
-);
+function initEvents() {
+
+  document
+    .getElementById("openCart")
+    ?.addEventListener(
+      "click",
+      openCart
+    );
+
+  document
+    .getElementById("closeCart")
+    ?.addEventListener(
+      "click",
+      closeCart
+    );
+
+  document
+    .getElementById("clearCart")
+    ?.addEventListener(
+      "click",
+      clearCart
+    );
+
+  document
+    .getElementById("checkoutButton")
+    ?.addEventListener(
+      "click",
+      checkout
+    );
+
+  document
+    .getElementById("closeAfter")
+    ?.addEventListener(
+      "click",
+      closeAfterPayment
+    );
 
 
-document.getElementById("closeCart")?.addEventListener(
-  "click",
-  closeCart
-);
+  /* CLICK FUERA DEL CARRITO */
+
+  cartOverlay?.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target === cartOverlay
+      ) {
+        closeCart();
+      }
+    }
+  );
 
 
-document.getElementById("clearCart")?.addEventListener(
-  "click",
-  clearCart
-);
+  /* CLICK FUERA DEL MODAL FINAL */
+
+  afterOverlay?.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target === afterOverlay
+      ) {
+        closeAfterPayment();
+      }
+    }
+  );
 
 
-document.getElementById("checkoutButton")?.addEventListener(
-  "click",
-  checkout
-);
+  /* ESC */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (
+        afterOverlay?.classList.contains("show")
+      ) {
+
+        closeAfterPayment();
+        return;
+      }
+
+      if (
+        cartOverlay?.classList.contains("show")
+      ) {
+
+        closeCart();
+      }
+    }
+  );
 
 
-document.getElementById("closeAfter")?.addEventListener(
-  "click",
-  closeAfterPayment
-);
+  /* LIMPIAR ERROR */
+
+  customerName?.addEventListener(
+    "input",
+    () => {
+
+      if (cartError) {
+        cartError.textContent = "";
+      }
+    }
+  );
+
+
+  customerPhone?.addEventListener(
+    "input",
+    () => {
+
+      if (cartError) {
+        cartError.textContent = "";
+      }
+    }
+  );
+
+
+  initDurationFilter();
+}
 
 
 /* =========================
-   CERRAR HACIENDO CLICK AFUERA
+   INICIALIZACIÓN
 ========================= */
 
-cartOverlay?.addEventListener(
-  "click",
-  event => {
+function init() {
 
-    if (event.target === cartOverlay) {
-      closeCart();
-    }
+  cartOverlay =
+    document.getElementById(
+      "cartOverlay"
+    );
 
-  }
-);
+  afterOverlay =
+    document.getElementById(
+      "afterOverlay"
+    );
+
+  cartItems =
+    document.getElementById(
+      "cartItems"
+    );
+
+  cartCount =
+    document.getElementById(
+      "cartCount"
+    );
+
+  cartTotal =
+    document.getElementById(
+      "cartTotal"
+    );
+
+  emptyCart =
+    document.getElementById(
+      "emptyCart"
+    );
+
+  cartBottom =
+    document.getElementById(
+      "cartBottom"
+    );
+
+  cartError =
+    document.getElementById(
+      "cartError"
+    );
+
+  customerName =
+    document.getElementById(
+      "customerName"
+    );
+
+  customerPhone =
+    document.getElementById(
+      "customerPhone"
+    );
+
+  sendWhatsApp =
+    document.getElementById(
+      "sendWhatsApp"
+    );
 
 
-afterOverlay?.addEventListener(
-  "click",
-  event => {
+  initEvents();
+  loadCart();
+  loadCustomer();
+}
 
-    if (event.target === afterOverlay) {
-      closeAfterPayment();
-    }
 
-  }
-);
+/*
+  El script también usa "defer",
+  pero mantenemos esta protección
+  para evitar errores si se cambia
+  la forma de cargar el archivo.
+*/
+if (
+  document.readyState === "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    init,
+    { once: true }
+  );
+
+} else {
+
+  init();
+}
 
 
 /* =========================
-   ESC
+   FUNCIONES GLOBALES
+   PARA LOS onclick DEL HTML
 ========================= */
 
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (event.key !== "Escape") return;
-
-    if (afterOverlay?.classList.contains("show")) {
-      closeAfterPayment();
-      return;
-    }
-
-    if (cartOverlay?.classList.contains("show")) {
-      closeCart();
-    }
-
-  }
-);
-
-
-/* =========================
-   LIMPIAR ERROR AL ESCRIBIR
-========================= */
-
-customerName?.addEventListener(
-  "input",
-  () => {
-    if (cartError) cartError.textContent = "";
-  }
-);
-
-
-customerPhone?.addEventListener(
-  "input",
-  () => {
-    if (cartError) cartError.textContent = "";
-  }
-);
-
-
-/* =========================
-   INICIO
-========================= */
-
-loadCart();
-loadCustomer();
+window.addToCart = addToCart;
+window.requestTrial = requestTrial;
+window.changeQuantity = changeQuantity;
+window.removeItem = removeItem;
+window.openCart = openCart;
+window.closeCart = closeCart;
