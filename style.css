@@ -14,7 +14,7 @@ button{cursor:pointer;border:0}
 nav{display:flex;gap:25px;margin-left:auto}
 nav a{font-size:14px;color:#a9adba}
 nav a:hover{color:white}
-.cart{background:#171922;color:white;border:1px solid var(--line);padding:9px 13px;border-radius:12px}
+.cart{margin-left:auto;background:#171922;color:white;border:1px solid var(--line);padding:9px 13px;border-radius:12px}
 .cart b{background:white;color:#08090d;border-radius:20px;padding:2px 7px;margin-left:4px}
 
 .hero{padding:85px 0 70px;position:relative;overflow:hidden}
