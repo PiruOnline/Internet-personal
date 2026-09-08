@@ -1,954 +1,693 @@
-"use strict";
+/* =========================================================
+   PERSONALNET - SCRIPT PRINCIPAL
+   Carrito + Filtros + FAQ + Menú + Mercado Pago + WhatsApp
+   ========================================================= */
 
-/* =========================
-   CONFIGURACIÓN
-========================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-const MP_LINK = "https://link.mercadopago.com.ar/pirunet";
-const ADMIN_WHATSAPP = "5493844546841";
+  /* =========================================================
+     ELEMENTOS
+     ========================================================= */
 
+  const cart = [];
 
-/* =========================
-   ESTADO
-========================= */
+  const cartModal = document.getElementById("cartModal");
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+  const cartCount = document.getElementById("cartCount");
 
-let cart = [];
+  const openCart = document.getElementById("openCart");
+  const closeCart = document.getElementById("closeCart");
 
-let customer = {
-  name: "",
-  phone: ""
-};
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  const whatsappBtn = document.getElementById("whatsappBtn");
 
+  const durationButtons = document.querySelectorAll("[data-filter]");
+  const planCards = document.querySelectorAll(".plan-card");
 
-/* =========================
-   ELEMENTOS
-========================= */
+  const faqItems = document.querySelectorAll(".faq-item");
 
-let cartOverlay;
-let afterOverlay;
-let cartItems;
-let cartCount;
-let cartTotal;
-let emptyCart;
-let cartBottom;
-let cartError;
-let customerName;
-let customerPhone;
-let sendWhatsApp;
+  const menuToggle = document.getElementById("menuToggle");
+  const navMenu = document.getElementById("navMenu");
 
-let toastTimer = null;
+  const toast = document.getElementById("toast");
 
 
-/* =========================
-   UTILIDADES
-========================= */
+  /* =========================================================
+     FORMATO DE PRECIOS
+     ========================================================= */
 
-function money(value) {
-  return "$" + Number(value || 0).toLocaleString("es-AR");
-}
-
-
-function escapeHTML(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-
-function normalizePhone(phone) {
-  return String(phone || "")
-    .replace(/\D/g, "")
-    .trim();
-}
-
-
-/* =========================
-   LOCAL STORAGE
-========================= */
-
-function saveCart() {
-  try {
-    localStorage.setItem(
-      "personalnet_cart",
-      JSON.stringify(cart)
-    );
-  } catch (error) {
-    console.warn("No se pudo guardar el carrito.", error);
-  }
-}
-
-
-function loadCart() {
-  try {
-    const saved = localStorage.getItem("personalnet_cart");
-
-    if (!saved) {
-      cart = [];
-      renderCart();
-      return;
-    }
-
-    const parsed = JSON.parse(saved);
-
-    cart = Array.isArray(parsed)
-      ? parsed.filter(item =>
-          item &&
-          typeof item.name === "string" &&
-          Number(item.price) >= 0
-        )
-      : [];
-
-  } catch (error) {
-    cart = [];
+  function money(value) {
+    return "$" + Number(value).toLocaleString("es-AR");
   }
 
-  renderCart();
-}
 
+  /* =========================================================
+     ESCAPAR HTML
+     ========================================================= */
 
-function loadCustomer() {
-  try {
-    const saved = localStorage.getItem(
-      "personalnet_customer"
-    );
-
-    if (!saved) return;
-
-    const parsed = JSON.parse(saved);
-
-    if (!parsed || typeof parsed !== "object") {
-      return;
-    }
-
-    customer = {
-      name: parsed.name || "",
-      phone: parsed.phone || ""
-    };
-
-    if (customerName) {
-      customerName.value = customer.name;
-    }
-
-    if (customerPhone) {
-      customerPhone.value = customer.phone;
-    }
-
-  } catch (error) {
-    console.warn(
-      "No se pudieron cargar los datos del cliente."
-    );
-  }
-}
-
-
-/* =========================
-   CARRITO
-========================= */
-
-function addToCart(name, price) {
-
-  const numericPrice = Number(price);
-
-  if (!name || !Number.isFinite(numericPrice)) {
-    return;
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
-  const existing = cart.find(
-    item => item.name === name
-  );
 
-  if (existing) {
-    existing.quantity =
-      Math.max(1, Number(existing.quantity) || 1) + 1;
-  } else {
-    cart.push({
-      id: `${Date.now()}-${Math.random()
-        .toString(36)
-        .slice(2)}`,
-      name: name,
-      price: numericPrice,
-      quantity: 1
-    });
-  }
+  /* =========================================================
+     NOTIFICACIÓN
+     ========================================================= */
 
-  saveCart();
-  renderCart();
-  openCart();
-  showAddedMessage(name);
-}
+  function showToast(message) {
 
+    if (!toast) return;
 
-function changeQuantity(id, amount) {
+    toast.textContent = message;
 
-  const item = cart.find(
-    product => String(product.id) === String(id)
-  );
-
-  if (!item) return;
-
-  item.quantity =
-    Math.max(0, Number(item.quantity) || 0) +
-    Number(amount || 0);
-
-  if (item.quantity <= 0) {
-    cart = cart.filter(
-      product => String(product.id) !== String(id)
-    );
-  }
-
-  saveCart();
-  renderCart();
-}
-
-
-function removeItem(id) {
-
-  cart = cart.filter(
-    item => String(item.id) !== String(id)
-  );
-
-  saveCart();
-  renderCart();
-}
-
-
-function clearCart() {
-
-  cart = [];
-
-  saveCart();
-  renderCart();
-
-  if (cartError) {
-    cartError.textContent = "";
-  }
-}
-
-
-function renderCart() {
-
-  if (!cartItems || !cartCount || !cartTotal) {
-    return;
-  }
-
-  cartItems.innerHTML = "";
-
-  let total = 0;
-  let count = 0;
-
-  cart.forEach(item => {
-
-    const quantity =
-      Math.max(1, Number(item.quantity) || 1);
-
-    const price =
-      Math.max(0, Number(item.price) || 0);
-
-    total += price * quantity;
-    count += quantity;
-
-    const element =
-      document.createElement("div");
-
-    element.className = "cart-item";
-
-    element.innerHTML = `
-      <div class="cart-item-info">
-        <div class="cart-item-name">
-          ${escapeHTML(item.name)}
-        </div>
-
-        <div class="cart-item-price">
-          ${money(price)} c/u
-        </div>
-      </div>
-
-      <div class="cart-item-controls">
-
-        <button
-          class="qty-btn"
-          type="button"
-          onclick="changeQuantity('${String(item.id)}', -1)"
-          aria-label="Disminuir cantidad"
-        >
-          −
-        </button>
-
-        <span class="qty">
-          ${quantity}
-        </span>
-
-        <button
-          class="qty-btn"
-          type="button"
-          onclick="changeQuantity('${String(item.id)}', 1)"
-          aria-label="Aumentar cantidad"
-        >
-          +
-        </button>
-
-        <button
-          class="remove-btn"
-          type="button"
-          onclick="removeItem('${String(item.id)}')"
-          aria-label="Eliminar producto"
-        >
-          ×
-        </button>
-
-      </div>
-    `;
-
-    cartItems.appendChild(element);
-  });
-
-  cartCount.textContent = count;
-  cartTotal.textContent = money(total);
-
-  if (cart.length === 0) {
-
-    if (emptyCart) {
-      emptyCart.style.display = "block";
-    }
-
-    if (cartBottom) {
-      cartBottom.style.display = "none";
-    }
-
-  } else {
-
-    if (emptyCart) {
-      emptyCart.style.display = "none";
-    }
-
-    if (cartBottom) {
-      cartBottom.style.display = "block";
-    }
-  }
-}
-
-
-/* =========================
-   MODAL CARRITO
-========================= */
-
-function openCart() {
-
-  if (!cartOverlay) return;
-
-  cartOverlay.classList.add("show");
-
-  cartOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  document.body.classList.add("locked");
-
-  setTimeout(() => {
-    customerName?.focus();
-  }, 100);
-}
-
-
-function closeCart() {
-
-  if (!cartOverlay) return;
-
-  cartOverlay.classList.remove("show");
-
-  cartOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  if (!afterOverlay?.classList.contains("show")) {
-    document.body.classList.remove("locked");
-  }
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-function showAddedMessage(name) {
-
-  const oldToast =
-    document.querySelector(".toast");
-
-  if (oldToast) {
-    oldToast.remove();
-  }
-
-  const container =
-    document.querySelector(".toast-container");
-
-  const toast =
-    document.createElement("div");
-
-  toast.className = "toast";
-
-  toast.textContent =
-    `${name} agregado al carrito`;
-
-  if (container) {
-    container.appendChild(toast);
-  } else {
-    document.body.appendChild(toast);
-  }
-
-  requestAnimationFrame(() => {
     toast.classList.add("show");
-  });
 
-  clearTimeout(toastTimer);
+    clearTimeout(window.personalnetToast);
 
-  toastTimer = setTimeout(() => {
-
-    toast.classList.remove("show");
-
-    setTimeout(() => {
-      toast.remove();
-    }, 250);
-
-  }, 2200);
-}
+    window.personalnetToast = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2800);
+  }
 
 
-/* =========================
-   PRUEBA
-========================= */
+  /* =========================================================
+     ABRIR CARRITO
+     ========================================================= */
 
-function requestTrial(service) {
+  function openCartModal() {
 
-  const message =
-`Hola! Quiero solicitar una prueba de ${service}.
+    if (!cartModal) return;
 
-¿Me pueden indicar cómo realizarla?`;
+    cartModal.classList.add("show");
 
-  const url =
-    `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
-
-  window.open(
-    url,
-    "_blank",
-    "noopener,noreferrer"
-  );
-}
+    document.body.classList.add("modal-open");
+  }
 
 
-/* =========================
-   CHECKOUT
-========================= */
+  /* =========================================================
+     CERRAR CARRITO
+     ========================================================= */
 
-function checkout() {
+  function closeCartModal() {
 
-  if (!cart.length) {
+    if (!cartModal) return;
 
-    if (cartError) {
-      cartError.textContent =
-        "Agregá al menos un producto.";
+    cartModal.classList.remove("show");
+
+    document.body.classList.remove("modal-open");
+  }
+
+
+  /* =========================================================
+     MOSTRAR CARRITO
+     ========================================================= */
+
+  function renderCart() {
+
+    if (!cartItems) return;
+
+    cartItems.innerHTML = "";
+
+    /* Carrito vacío */
+
+    if (cart.length === 0) {
+
+      cartItems.innerHTML = `
+        <div class="cart-empty">
+
+          <div class="cart-empty-icon">
+            🛒
+          </div>
+
+          <h3>Tu carrito está vacío</h3>
+
+          <p>
+            Elegí un plan para comenzar.
+          </p>
+
+        </div>
+      `;
+
     }
 
-    return;
-  }
-
-  const name =
-    customerName?.value.trim() || "";
-
-  const phone =
-    customerPhone?.value.trim() || "";
-
-  if (name.length < 2) {
-
-    if (cartError) {
-      cartError.textContent =
-        "Ingresá tu nombre.";
-    }
+    /* Productos */
 
-    customerName?.focus();
-
-    return;
-  }
+    else {
 
-  if (normalizePhone(phone).length < 8) {
-
-    if (cartError) {
-      cartError.textContent =
-        "Ingresá un número de WhatsApp válido.";
-    }
+      cart.forEach(function (item, index) {
 
-    customerPhone?.focus();
+        const row = document.createElement("div");
 
-    return;
-  }
+        row.className = "cart-item";
 
-  customer = {
-    name,
-    phone
-  };
+        row.innerHTML = `
 
-  try {
-    localStorage.setItem(
-      "personalnet_customer",
-      JSON.stringify(customer)
-    );
-  } catch (error) {
-    console.warn(
-      "No se pudo guardar el cliente."
-    );
-  }
+          <div class="cart-item-info">
 
-  const message =
-    createOrderMessage();
+            <strong>
+              ${escapeHtml(item.name)}
+            </strong>
 
-  const whatsappUrl =
-    `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+            <span>
+              ${escapeHtml(item.duration)}
+              ${item.devices ? " · " + escapeHtml(item.devices) : ""}
+            </span>
 
-  try {
+          </div>
 
-    localStorage.setItem(
-      "personalnet_order",
-      JSON.stringify(cart)
-    );
+          <div class="cart-item-right">
 
-    localStorage.setItem(
-      "personalnet_order_wa",
-      whatsappUrl
-    );
+            <b>
+              ${money(item.price)}
+            </b>
 
-  } catch (error) {
+            <button
+              type="button"
+              class="remove-item"
+              data-index="${index}"
+              aria-label="Eliminar producto"
+            >
+              ×
+            </button>
 
-    console.warn(
-      "No se pudo guardar el pedido."
-    );
-  }
+          </div>
 
-  /*
-    Abrimos Mercado Pago directamente
-    desde el click del usuario para reducir
-    el riesgo de bloqueo del navegador.
-  */
-  const paymentWindow =
-    window.open(
-      MP_LINK,
-      "_blank",
-      "noopener,noreferrer"
-    );
+        `;
 
-  /*
-    Si el navegador bloquea la ventana,
-    mostramos igualmente el enlace.
-  */
-  if (!paymentWindow) {
-    window.location.href = MP_LINK;
-    return;
-  }
+        cartItems.appendChild(row);
 
-  closeCart();
+      });
 
-  setTimeout(() => {
-    showAfterPayment();
-  }, 600);
-}
 
+      /* Botones eliminar */
 
-/* =========================
-   MENSAJE DEL PEDIDO
-========================= */
+      cartItems
+        .querySelectorAll(".remove-item")
+        .forEach(function (button) {
 
-function createOrderMessage() {
+          button.addEventListener("click", function () {
 
-  let total = 0;
+            const index = Number(button.dataset.index);
 
-  const products =
-    cart.map(item => {
+            cart.splice(index, 1);
 
-      const quantity =
-        Math.max(
-          1,
-          Number(item.quantity) || 1
-        );
+            renderCart();
 
-      const price =
-        Number(item.price) || 0;
+            showToast("Plan eliminado");
 
-      const subtotal =
-        price * quantity;
+          });
 
-      total += subtotal;
-
-      return `• ${item.name} x${quantity} — ${money(subtotal)}`;
-
-    }).join("\n");
-
-  return `Hola! Quiero confirmar mi compra en PERSONALNET.
-
-👤 Cliente: ${customer.name}
-📱 WhatsApp: ${customer.phone}
-
-📦 Pedido:
-${products}
-
-💰 Total: ${money(total)}
-
-💳 Mercado Pago:
-${MP_LINK}
-
-Ya realicé el pago y envío el comprobante por este medio.`;
-}
-
-
-/* =========================
-   DESPUÉS DEL PAGO
-========================= */
-
-function showAfterPayment() {
-
-  if (!afterOverlay) return;
-
-  let whatsappUrl = "";
-
-  try {
-
-    whatsappUrl =
-      localStorage.getItem(
-        "personalnet_order_wa"
-      ) || "";
-
-  } catch (error) {
-
-    whatsappUrl = "";
-  }
-
-  if (sendWhatsApp) {
-
-    sendWhatsApp.href =
-      whatsappUrl ||
-      `https://wa.me/${ADMIN_WHATSAPP}`;
-  }
-
-  afterOverlay.classList.add("show");
-
-  afterOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  document.body.classList.add("locked");
-}
-
-
-function closeAfterPayment() {
-
-  if (!afterOverlay) return;
-
-  afterOverlay.classList.remove("show");
-
-  afterOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  if (!cartOverlay?.classList.contains("show")) {
-    document.body.classList.remove("locked");
-  }
-}
-
-
-/* =========================
-   FILTRO DE DURACIÓN
-========================= */
-
-function initDurationFilter() {
-
-  const buttons =
-    document.querySelectorAll(
-      ".duration-btn"
-    );
-
-  const cards =
-    document.querySelectorAll(
-      ".plan-card"
-    );
-
-  if (!buttons.length || !cards.length) {
-    return;
-  }
-
-  buttons.forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const duration =
-          button.dataset.duration;
-
-        buttons.forEach(item => {
-          item.classList.remove("active");
         });
 
-        button.classList.add("active");
+    }
 
-        cards.forEach(card => {
 
-          const cardDuration =
-            card.dataset.duration;
+    /* Total */
 
-          if (
-            duration === "all" ||
-            duration === cardDuration
-          ) {
+    const total = cart.reduce(function (sum, item) {
 
-            card.classList.remove(
-              "is-hidden"
-            );
+      return sum + Number(item.price);
 
-          } else {
+    }, 0);
 
-            card.classList.add(
-              "is-hidden"
-            );
+
+    if (cartTotal) {
+
+      cartTotal.textContent = money(total);
+
+    }
+
+
+    /* Cantidad */
+
+    if (cartCount) {
+
+      cartCount.textContent = cart.length;
+
+    }
+
+  }
+
+
+  /* =========================================================
+     AGREGAR AL CARRITO
+     ========================================================= */
+
+  function addToCart(
+    name,
+    duration,
+    price,
+    devices = ""
+  ) {
+
+    cart.push({
+
+      name: name,
+
+      duration: duration,
+
+      price: Number(price),
+
+      devices: devices
+
+    });
+
+
+    renderCart();
+
+    openCartModal();
+
+    showToast("Plan agregado al carrito");
+
+  }
+
+
+  /* IMPORTANTE:
+     Permite usar onclick="addToCart(...)" desde el HTML */
+
+  window.addToCart = addToCart;
+
+
+  /* =========================================================
+     BOTÓN ABRIR CARRITO
+     ========================================================= */
+
+  if (openCart) {
+
+    openCart.addEventListener("click", function () {
+
+      openCartModal();
+
+    });
+
+  }
+
+
+  /* =========================================================
+     BOTÓN CERRAR CARRITO
+     ========================================================= */
+
+  if (closeCart) {
+
+    closeCart.addEventListener("click", function () {
+
+      closeCartModal();
+
+    });
+
+  }
+
+
+  /* =========================================================
+     CERRAR CLICKEANDO FUERA
+     ========================================================= */
+
+  if (cartModal) {
+
+    cartModal.addEventListener("click", function (event) {
+
+      if (event.target === cartModal) {
+
+        closeCartModal();
+
+      }
+
+    });
+
+  }
+
+
+  /* =========================================================
+     CERRAR CON ESC
+     ========================================================= */
+
+  document.addEventListener("keydown", function (event) {
+
+    if (event.key === "Escape") {
+
+      closeCartModal();
+
+    }
+
+  });
+
+
+  /* =========================================================
+     FILTRO DE DURACIÓN
+     Todos / 7 / 15 / 30
+     ========================================================= */
+
+  durationButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+      durationButtons.forEach(function (btn) {
+
+        btn.classList.remove("active");
+
+      });
+
+
+      button.classList.add("active");
+
+
+      const filter = button.dataset.filter;
+
+
+      planCards.forEach(function (card) {
+
+        /* Mostrar todos */
+
+        if (filter === "all") {
+
+          card.classList.remove("hidden");
+
+          card
+            .querySelectorAll("[data-duration]")
+            .forEach(function (option) {
+
+              option.classList.remove("hidden");
+
+            });
+
+          return;
+
+        }
+
+
+        /* Buscar opciones */
+
+        const options =
+          card.querySelectorAll("[data-duration]");
+
+
+        let visible = false;
+
+
+        options.forEach(function (option) {
+
+          const match =
+            option.dataset.duration === filter;
+
+
+          option.classList.toggle(
+            "hidden",
+            !match
+          );
+
+
+          if (match) {
+
+            visible = true;
+
           }
 
         });
-      }
-    );
+
+
+        card.classList.toggle(
+          "hidden",
+          !visible
+        );
+
+      });
+
+    });
+
   });
-}
 
 
-/* =========================
-   EVENTOS
-========================= */
+  /* =========================================================
+     FAQ
+     ========================================================= */
 
-function initEvents() {
+  faqItems.forEach(function (item) {
 
-  document
-    .getElementById("openCart")
-    ?.addEventListener(
-      "click",
-      openCart
-    );
-
-  document
-    .getElementById("closeCart")
-    ?.addEventListener(
-      "click",
-      closeCart
-    );
-
-  document
-    .getElementById("clearCart")
-    ?.addEventListener(
-      "click",
-      clearCart
-    );
-
-  document
-    .getElementById("checkoutButton")
-    ?.addEventListener(
-      "click",
-      checkout
-    );
-
-  document
-    .getElementById("closeAfter")
-    ?.addEventListener(
-      "click",
-      closeAfterPayment
-    );
+    const question =
+      item.querySelector(".faq-question");
 
 
-  /* CLICK FUERA DEL CARRITO */
+    if (!question) return;
 
-  cartOverlay?.addEventListener(
-    "click",
-    event => {
 
-      if (
-        event.target === cartOverlay
-      ) {
-        closeCart();
+    question.addEventListener("click", function () {
+
+      const isOpen =
+        item.classList.contains("open");
+
+
+      /* Cerrar todos */
+
+      faqItems.forEach(function (other) {
+
+        other.classList.remove("open");
+
+      });
+
+
+      /* Abrir seleccionado */
+
+      if (!isOpen) {
+
+        item.classList.add("open");
+
       }
-    }
-  );
+
+    });
+
+  });
 
 
-  /* CLICK FUERA DEL MODAL FINAL */
+  /* =========================================================
+     MENÚ MÓVIL
+     ========================================================= */
 
-  afterOverlay?.addEventListener(
-    "click",
-    event => {
+  if (menuToggle) {
 
-      if (
-        event.target === afterOverlay
-      ) {
-        closeAfterPayment();
+    menuToggle.addEventListener("click", function () {
+
+      if (navMenu) {
+
+        navMenu.classList.toggle("open");
+
       }
-    }
-  );
+
+      menuToggle.classList.toggle("active");
+
+    });
+
+  }
 
 
-  /* ESC */
+  /* =========================================================
+     CERRAR MENÚ AL TOCAR UN ENLACE
+     ========================================================= */
 
-  document.addEventListener(
-    "keydown",
-    event => {
+  if (navMenu) {
 
-      if (event.key !== "Escape") {
+    navMenu
+      .querySelectorAll("a")
+      .forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+          navMenu.classList.remove("open");
+
+          if (menuToggle) {
+
+            menuToggle.classList.remove("active");
+
+          }
+
+        });
+
+      });
+
+  }
+
+
+  /* =========================================================
+     MERCADO PAGO
+     ========================================================= */
+
+  if (checkoutBtn) {
+
+    checkoutBtn.addEventListener("click", function () {
+
+      if (cart.length === 0) {
+
+        showToast(
+          "Primero elegí un plan."
+        );
+
         return;
+
       }
 
-      if (
-        afterOverlay?.classList.contains("show")
-      ) {
 
-        closeAfterPayment();
-        return;
+      window.open(
+        "https://link.mercadopago.com.ar/pirunet",
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+
+      showToast(
+        "Mercado Pago se abrió."
+      );
+
+    });
+
+  }
+
+
+  /* =========================================================
+     WHATSAPP
+     ========================================================= */
+
+  if (whatsappBtn) {
+
+    whatsappBtn.addEventListener(
+      "click",
+      function () {
+
+        if (cart.length === 0) {
+
+          showToast(
+            "Primero elegí un plan."
+          );
+
+          return;
+
+        }
+
+
+        const lines =
+          cart.map(function (item) {
+
+            return (
+              "• " +
+              item.name +
+              " — " +
+              item.duration +
+              (item.devices
+                ? " — " + item.devices
+                : "") +
+              " — " +
+              money(item.price)
+            );
+
+          });
+
+
+        const total =
+          cart.reduce(function (
+            sum,
+            item
+          ) {
+
+            return sum + Number(item.price);
+
+          }, 0);
+
+
+        const message =
+
+          "Hola PERSONALNET 👋\n\n" +
+
+          "Quiero contratar estos planes:\n\n" +
+
+          lines.join("\n") +
+
+          "\n\nTotal: " +
+
+          money(total) +
+
+          "\n\n" +
+
+          "Quedo atento/a para continuar con la activación.";
+
+
+        const whatsappURL =
+
+          "https://wa.me/5493844546841?text=" +
+
+          encodeURIComponent(message);
+
+
+        window.open(
+          whatsappURL,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
       }
-
-      if (
-        cartOverlay?.classList.contains("show")
-      ) {
-
-        closeCart();
-      }
-    }
-  );
-
-
-  /* LIMPIAR ERROR */
-
-  customerName?.addEventListener(
-    "input",
-    () => {
-
-      if (cartError) {
-        cartError.textContent = "";
-      }
-    }
-  );
-
-
-  customerPhone?.addEventListener(
-    "input",
-    () => {
-
-      if (cartError) {
-        cartError.textContent = "";
-      }
-    }
-  );
-
-
-  initDurationFilter();
-}
-
-
-/* =========================
-   INICIALIZACIÓN
-========================= */
-
-function init() {
-
-  cartOverlay =
-    document.getElementById(
-      "cartOverlay"
     );
 
-  afterOverlay =
-    document.getElementById(
-      "afterOverlay"
-    );
-
-  cartItems =
-    document.getElementById(
-      "cartItems"
-    );
-
-  cartCount =
-    document.getElementById(
-      "cartCount"
-    );
-
-  cartTotal =
-    document.getElementById(
-      "cartTotal"
-    );
-
-  emptyCart =
-    document.getElementById(
-      "emptyCart"
-    );
-
-  cartBottom =
-    document.getElementById(
-      "cartBottom"
-    );
-
-  cartError =
-    document.getElementById(
-      "cartError"
-    );
-
-  customerName =
-    document.getElementById(
-      "customerName"
-    );
-
-  customerPhone =
-    document.getElementById(
-      "customerPhone"
-    );
-
-  sendWhatsApp =
-    document.getElementById(
-      "sendWhatsApp"
-    );
+  }
 
 
-  initEvents();
-  loadCart();
-  loadCustomer();
-}
+  /* =========================================================
+     SCROLL SUAVE
+     ========================================================= */
+
+  document
+    .querySelectorAll('a[href^="#"]')
+    .forEach(function (link) {
+
+      link.addEventListener(
+        "click",
+        function (event) {
+
+          const id =
+            link.getAttribute("href");
 
 
-/*
-  El script también usa "defer",
-  pero mantenemos esta protección
-  para evitar errores si se cambia
-  la forma de cargar el archivo.
-*/
-if (
-  document.readyState === "loading"
-) {
+          if (!id || id === "#") {
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    init,
-    { once: true }
-  );
+            return;
 
-} else {
-
-  init();
-}
+          }
 
 
-/* =========================
-   FUNCIONES GLOBALES
-   PARA LOS onclick DEL HTML
-========================= */
+          const target =
+            document.querySelector(id);
 
-window.addToCart = addToCart;
-window.requestTrial = requestTrial;
-window.changeQuantity = changeQuantity;
-window.removeItem = removeItem;
-window.openCart = openCart;
-window.closeCart = closeCart;
+
+          if (!target) {
+
+            return;
+
+          }
+
+
+          event.preventDefault();
+
+
+          target.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+          });
+
+        }
+      );
+
+    });
+
+
+  /* =========================================================
+     INICIALIZAR
+     ========================================================= */
+
+  renderCart();
+
+});
