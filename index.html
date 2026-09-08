@@ -2,42 +2,44 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <meta name="theme-color" content="#07100c">
-  <meta
-    name="description"
-    content="PERSONALNET - Internet sin límites para Personal y Claro."
-  >
+  <meta name="theme-color" content="#050606">
+  <meta name="description" content="PERSONALNET — Internet sin límites para Personal y Claro Argentina.">
+  <meta name="author" content="PERSONALNET">
 
-  <title>PERSONALNET • Internet sin límites</title>
+  <title>PERSONALNET | Planes de Internet Argentina</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- ================= NAVBAR ================= -->
-
+  <!-- =========================
+       NAVBAR
+  ========================== -->
   <header class="navbar">
-    <div class="container nav-inner">
+    <div class="nav-inner">
 
       <a href="#" class="brand">
-        <span class="brand-icon">∞</span>
+        <span class="brand-mark">P</span>
         <span>PERSONALNET</span>
       </a>
 
       <nav class="nav-links">
         <a href="#planes">Planes</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#faq">Preguntas</a>
       </nav>
 
-      <button class="cart-button" id="openCart" aria-label="Abrir carrito">
+      <button class="cart-button" id="openCart" type="button" aria-label="Abrir carrito">
         <span class="cart-icon">🛒</span>
         <span>Carrito</span>
-        <b id="cartCount">0</b>
+        <span class="cart-count" id="cartCount">0</span>
       </button>
 
     </div>
@@ -46,86 +48,53 @@
 
   <main>
 
-    <!-- ================= HERO ================= -->
-
+    <!-- =========================
+         HERO
+    ========================== -->
     <section class="hero">
-      <div class="container hero-grid">
+      <div class="container hero-container">
 
         <div class="hero-content">
 
-          <div class="status-pill">
-            <span class="status-dot"></span>
-            SERVICIO DISPONIBLE
+          <div class="eyebrow">
+            🇦🇷 PERSONAL & CLARO ARGENTINA
           </div>
 
-          <h1 class="hero-title">
-            Internet <span>sin límites.</span>
+          <h1>
+            Elegí tu plan de
+            <span>Internet.</span>
           </h1>
 
           <p class="hero-description">
-            Conectate a internet de forma rápida, simple y sin complicaciones.
+            Internet sin límites, planes simples y soporte por WhatsApp.
+            Elegí el servicio que necesitás y empezá.
           </p>
 
           <div class="hero-actions">
-            <a href="#planes" class="btn btn-primary">
+            <a href="#planes" class="button button-primary">
               Ver planes
             </a>
 
-            <a href="#como-funciona" class="btn btn-secondary">
+            <a href="#como-funciona" class="button button-secondary">
               Cómo funciona
             </a>
           </div>
 
-          <div class="trust-stats">
-
-            <div class="trust-item">
+          <div class="hero-trust">
+            <div>
               <strong>24/7</strong>
               <span>Soporte</span>
             </div>
 
-            <div class="trust-item">
+            <div>
               <strong>100%</strong>
-              <span>Digital</span>
+              <span>Online</span>
             </div>
-
-            <div class="trust-item">
-              <strong>ARG</strong>
-              <span>Servicio local</span>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- TARJETA COMPACTA -->
-
-        <div class="hero-card">
-
-          <div class="hero-card-top">
-            <span class="mini-icon">⚡</span>
 
             <div>
-              <small>PERSONALNET</small>
-              <strong>Conectate sin complicaciones</strong>
+              <strong>ARG</strong>
+              <span>Argentina</span>
             </div>
-          </div>
-
-          <div class="hero-card-line"></div>
-
-          <div class="hero-card-info">
-            <span>Internet</span>
-            <b>Sin límites</b>
-          </div>
-
-          <div class="hero-card-info">
-            <span>Activación</span>
-            <b>Rápida</b>
-          </div>
-
-          <div class="hero-card-info">
-            <span>Soporte</span>
-            <b>WhatsApp</b>
           </div>
 
         </div>
@@ -134,357 +103,560 @@
     </section>
 
 
-    <!-- ================= PLANES ================= -->
-
+    <!-- =========================
+         PLANES
+    ========================== -->
     <section class="plans-section" id="planes">
-
       <div class="container">
 
         <div class="section-heading">
-          <span class="section-kicker">NUESTROS SERVICIOS</span>
+          <span class="section-kicker">PERSONALNET</span>
 
           <h2>Elegí tu plan</h2>
 
           <p>
-            Seleccioná el servicio que necesitás y agregalo al carrito.
+            Seleccioná el servicio que necesitás y elegí la duración.
+            Pagás con Mercado Pago y luego confirmás tu compra por WhatsApp.
           </p>
         </div>
 
 
-        <!-- CGLITE PERSONAL -->
+        <!-- Selector visual -->
+        <div class="duration-bar">
+          <span class="duration-label">Duración</span>
 
-        <article class="service-card">
+          <div class="duration-options">
+            <a href="#planes" class="duration-option active">Todos</a>
+            <a href="#cglite-personal" class="duration-option">7 días</a>
+            <a href="#cglite-personal" class="duration-option">15 días</a>
+            <a href="#cglite-personal" class="duration-option">30 días</a>
+          </div>
+        </div>
 
-          <div class="service-header">
 
-            <div class="service-logo personal-logo">
-              C
-            </div>
+        <!-- =========================
+             CGLITE PERSONAL
+        ========================== -->
+        <div class="service-group" id="cglite-personal">
 
-            <div class="service-title">
+          <div class="service-heading">
+            <div>
+              <span class="service-tag personal">PERSONAL</span>
               <h3>CGLite Personal</h3>
-              <p>Internet para línea Personal</p>
+              <p>Internet ilimitado para líneas Personal Argentina.</p>
             </div>
 
+            <a
+              href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
+              target="_blank"
+              rel="noopener"
+              class="download-link"
+            >
+              Descargar CGLite ↗
+            </a>
           </div>
 
 
           <div class="plans-grid">
 
-            <div class="plan-card">
-              <span class="plan-duration">7 Días</span>
-              <strong>$4.500</strong>
+            <article class="plan-card">
+              <div class="plan-top">
+                <span class="plan-name">7 días</span>
+              </div>
+
+              <div class="price">
+                <small>$</small>4.500
+              </div>
+
+              <div class="price-note">
+                Servicio por 7 días
+              </div>
+
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Personal Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
 
               <button
-                class="plan-button"
-                onclick="addToCart('CGLite Personal • 7 Días', 4500)"
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Personal — 7 Días', 4500)"
               >
-                Comprar
+                Comprar plan
               </button>
-            </div>
-
-
-            <div class="plan-card">
-              <span class="plan-duration">15 Días</span>
-              <strong>$6.000</strong>
 
               <button
-                class="plan-button"
-                onclick="addToCart('CGLite Personal • 15 Días', 6000)"
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Personal')"
               >
-                Comprar
+                Pedir prueba
               </button>
-            </div>
+            </article>
 
 
-            <div class="plan-card recommended">
-              <span class="recommended-badge">RECOMENDADO</span>
-              <span class="plan-duration">30 Días</span>
-              <strong>$8.000</strong>
+            <article class="plan-card">
+              <div class="plan-top">
+                <span class="plan-name">15 días</span>
+              </div>
+
+              <div class="price">
+                <small>$</small>6.000
+              </div>
+
+              <div class="price-note">
+                Servicio por 15 días
+              </div>
+
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Personal Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
 
               <button
-                class="plan-button"
-                onclick="addToCart('CGLite Personal • 30 Días', 8000)"
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Personal — 15 Días', 6000)"
               >
-                Comprar
+                Comprar plan
               </button>
-            </div>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Personal')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+
+            <article class="plan-card featured">
+
+              <div class="featured-badge">
+                Más elegido
+              </div>
+
+              <div class="plan-top">
+                <span class="plan-name">30 días</span>
+              </div>
+
+              <div class="price">
+                <small>$</small>8.000
+              </div>
+
+              <div class="price-note">
+                Servicio por 30 días
+              </div>
+
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Personal Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Personal — 30 Días', 8000)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Personal')"
+              >
+                Pedir prueba
+              </button>
+            </article>
 
           </div>
+        </div>
 
 
-          <div class="service-actions">
+        <!-- =========================
+             CGLITE CLARO
+        ========================== -->
+        <div class="service-group" id="cglite-claro">
 
-            <a
-              href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="download-button"
-            >
-              Descargar CGLite
-            </a>
-
-            <button
-              class="trial-button"
-              onclick="requestTrial('CGLite Personal')"
-            >
-              Consultar
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- CGLITE CLARO -->
-
-        <article class="service-card">
-
-          <div class="service-header">
-
-            <div class="service-logo claro-logo">
-              C
-            </div>
-
-            <div class="service-title">
+          <div class="service-heading">
+            <div>
+              <span class="service-tag claro">CLARO</span>
               <h3>CGLite Claro</h3>
-              <p>Internet para línea Claro</p>
+              <p>Internet ilimitado para líneas Claro Argentina.</p>
             </div>
-
-          </div>
-
-
-          <div class="plans-grid">
-
-            <div class="plan-card">
-              <span class="plan-duration">7 Días</span>
-              <strong>$4.500</strong>
-
-              <button
-                class="plan-button"
-                onclick="addToCart('CGLite Claro • 7 Días', 4500)"
-              >
-                Comprar
-              </button>
-            </div>
-
-
-            <div class="plan-card">
-              <span class="plan-duration">15 Días</span>
-              <strong>$6.000</strong>
-
-              <button
-                class="plan-button"
-                onclick="addToCart('CGLite Claro • 15 Días', 6000)"
-              >
-                Comprar
-              </button>
-            </div>
-
-
-            <div class="plan-card recommended">
-              <span class="recommended-badge">RECOMENDADO</span>
-              <span class="plan-duration">30 Días</span>
-              <strong>$8.000</strong>
-
-              <button
-                class="plan-button"
-                onclick="addToCart('CGLite Claro • 30 Días', 8000)"
-              >
-                Comprar
-              </button>
-            </div>
-
-          </div>
-
-
-          <div class="service-actions">
 
             <a
               href="https://www.mediafire.com/file/1hstmd4kqu87khe/CG_LITE_com.dtunnel.lite.apk/file"
               target="_blank"
-              rel="noopener noreferrer"
-              class="download-button"
+              rel="noopener"
+              class="download-link"
             >
-              Descargar CGLite
+              Descargar CGLite ↗
             </a>
-
-            <button
-              class="trial-button"
-              onclick="requestTrial('CGLite Claro')"
-            >
-              Consultar
-            </button>
-
-          </div>
-
-        </article>
-
-
-        <!-- HTTP CUSTOM -->
-
-        <article class="service-card">
-
-          <div class="service-header">
-
-            <div class="service-logo http-logo">
-              H
-            </div>
-
-            <div class="service-title">
-              <h3>HTTP Custom</h3>
-              <p>Planes por dispositivo</p>
-            </div>
-
           </div>
 
 
           <div class="plans-grid">
 
-            <div class="plan-card offer">
+            <article class="plan-card">
+              <div class="plan-top">
+                <span class="plan-name">7 días</span>
+              </div>
 
-              <span class="offer-badge">OFERTA</span>
+              <div class="price">
+                <small>$</small>4.500
+              </div>
 
-              <span class="old-price">$4.500</span>
-              <span class="plan-duration">7 Días</span>
+              <div class="price-note">
+                Servicio por 7 días
+              </div>
 
-              <strong>$3.500</strong>
-
-              <button
-                class="plan-button"
-                onclick="addToCart('HTTP Custom • 7 Días', 3500)"
-              >
-                Comprar
-              </button>
-
-            </div>
-
-
-            <div class="plan-card">
-
-              <span class="old-price">$7.500</span>
-              <span class="plan-duration">30 Días • 1 Dispositivo</span>
-
-              <strong>$7.000</strong>
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Claro Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
 
               <button
-                class="plan-button"
-                onclick="addToCart('HTTP Custom • 30 Días • 1 Dispositivo', 7000)"
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Claro — 7 Días', 4500)"
               >
-                Comprar
+                Comprar plan
               </button>
-
-            </div>
-
-
-            <div class="plan-card best-seller">
-
-              <span class="best-badge">MÁS VENDIDO</span>
-
-              <span class="old-price">$13.500</span>
-              <span class="plan-duration">30 Días • 2 Dispositivos</span>
-
-              <strong>$12.000</strong>
 
               <button
-                class="plan-button"
-                onclick="addToCart('HTTP Custom • 30 Días • 2 Dispositivos', 12000)"
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Claro')"
               >
-                Comprar
+                Pedir prueba
               </button>
+            </article>
 
-            </div>
 
+            <article class="plan-card">
+              <div class="plan-top">
+                <span class="plan-name">15 días</span>
+              </div>
 
-            <div class="plan-card">
+              <div class="price">
+                <small>$</small>6.000
+              </div>
 
-              <span class="old-price">$22.500</span>
-              <span class="plan-duration">30 Días • 5 Dispositivos</span>
+              <div class="price-note">
+                Servicio por 15 días
+              </div>
 
-              <strong>$20.000</strong>
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Claro Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
 
               <button
-                class="plan-button"
-                onclick="addToCart('HTTP Custom • 30 Días • 5 Dispositivos', 20000)"
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Claro — 15 Días', 6000)"
               >
-                Comprar
+                Comprar plan
               </button>
 
-            </div>
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Claro')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+
+            <article class="plan-card featured">
+
+              <div class="featured-badge">
+                Más elegido
+              </div>
+
+              <div class="plan-top">
+                <span class="plan-name">30 días</span>
+              </div>
+
+              <div class="price">
+                <small>$</small>8.000
+              </div>
+
+              <div class="price-note">
+                Servicio por 30 días
+              </div>
+
+              <ul class="features">
+                <li>✓ Internet ilimitado</li>
+                <li>✓ Para Claro Argentina</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('CGLite Claro — 30 Días', 8000)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('CGLite Claro')"
+              >
+                Pedir prueba
+              </button>
+            </article>
 
           </div>
+        </div>
 
 
-          <div class="service-actions">
+        <!-- =========================
+             HTTP CUSTOM
+        ========================== -->
+        <div class="service-group" id="http-custom">
+
+          <div class="service-heading">
+            <div>
+              <span class="service-tag http">HTTP CUSTOM</span>
+              <h3>HTTP Custom</h3>
+              <p>Elegí tu plan según la cantidad de dispositivos.</p>
+            </div>
 
             <a
               href="https://play.google.com/store/apps/details?id=xyz.easypro.httpcustom"
               target="_blank"
-              rel="noopener noreferrer"
-              class="download-button"
+              rel="noopener"
+              class="download-link"
             >
-              Descargar HTTP Custom
+              Descargar app ↗
             </a>
-
-            <button
-              class="trial-button"
-              onclick="requestTrial('HTTP Custom')"
-            >
-              Consultar
-            </button>
-
           </div>
 
-        </article>
+
+          <div class="plans-grid http-grid">
+
+            <article class="plan-card">
+
+              <div class="plan-top">
+                <span class="plan-name">7 días</span>
+                <span class="device-label">1 dispositivo</span>
+              </div>
+
+              <div class="old-price">$4.500</div>
+
+              <div class="price">
+                <small>$</small>3.500
+              </div>
+
+              <div class="offer-label">
+                Oferta
+              </div>
+
+              <ul class="features">
+                <li>✓ 1 dispositivo</li>
+                <li>✓ Servicio por 7 días</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('HTTP Custom — 7 Días — 1 Dispositivo', 3500)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('HTTP Custom')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+
+            <article class="plan-card">
+
+              <div class="plan-top">
+                <span class="plan-name">30 días</span>
+                <span class="device-label">1 dispositivo</span>
+              </div>
+
+              <div class="old-price">$7.500</div>
+
+              <div class="price">
+                <small>$</small>7.000
+              </div>
+
+              <div class="price-note">
+                30 días de servicio
+              </div>
+
+              <ul class="features">
+                <li>✓ 1 dispositivo</li>
+                <li>✓ Servicio por 30 días</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('HTTP Custom — 30 Días — 1 Dispositivo', 7000)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('HTTP Custom')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+
+            <article class="plan-card featured">
+
+              <div class="featured-badge">
+                Más vendido
+              </div>
+
+              <div class="plan-top">
+                <span class="plan-name">30 días</span>
+                <span class="device-label">2 dispositivos</span>
+              </div>
+
+              <div class="old-price">$13.500</div>
+
+              <div class="price">
+                <small>$</small>12.000
+              </div>
+
+              <div class="price-note">
+                30 días de servicio
+              </div>
+
+              <ul class="features">
+                <li>✓ 2 dispositivos</li>
+                <li>✓ Servicio por 30 días</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('HTTP Custom — 30 Días — 2 Dispositivos', 12000)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('HTTP Custom')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+
+            <article class="plan-card">
+
+              <div class="plan-top">
+                <span class="plan-name">30 días</span>
+                <span class="device-label">5 dispositivos</span>
+              </div>
+
+              <div class="old-price">$22.500</div>
+
+              <div class="price">
+                <small>$</small>20.000
+              </div>
+
+              <div class="price-note">
+                30 días de servicio
+              </div>
+
+              <ul class="features">
+                <li>✓ 5 dispositivos</li>
+                <li>✓ Servicio por 30 días</li>
+                <li>✓ Soporte por WhatsApp</li>
+              </ul>
+
+              <button
+                class="buy-button"
+                type="button"
+                onclick="addToCart('HTTP Custom — 30 Días — 5 Dispositivos', 20000)"
+              >
+                Comprar plan
+              </button>
+
+              <button
+                class="trial-button"
+                type="button"
+                onclick="requestTrial('HTTP Custom')"
+              >
+                Pedir prueba
+              </button>
+            </article>
+
+          </div>
+        </div>
 
       </div>
     </section>
 
 
-    <!-- ================= COMO FUNCIONA ================= -->
-
-    <section class="process-section" id="como-funciona">
-
+    <!-- =========================
+         COMO FUNCIONA
+    ========================== -->
+    <section class="simple-section" id="como-funciona">
       <div class="container">
 
         <div class="section-heading">
-          <span class="section-kicker">SIMPLE Y RÁPIDO</span>
+          <span class="section-kicker">FÁCIL Y RÁPIDO</span>
           <h2>¿Cómo funciona?</h2>
+          <p>Contratá tu servicio en pocos pasos.</p>
         </div>
 
+        <div class="steps-grid">
 
-        <div class="process-grid">
-
-          <div class="process-card">
-            <span>01</span>
-            <h3>Elegí tu plan</h3>
-            <p>
-              Seleccioná el servicio y la duración que querés.
-            </p>
+          <div class="step-card">
+            <span class="step-number">01</span>
+            <h3>Probá</h3>
+            <p>Pedí una prueba antes de contratar para comprobar compatibilidad.</p>
           </div>
 
-          <div class="process-card">
-            <span>02</span>
-            <h3>Realizá el pago</h3>
-            <p>
-              Completá tus datos y realizá el pago de forma segura.
-            </p>
+          <div class="step-card">
+            <span class="step-number">02</span>
+            <h3>Elegí</h3>
+            <p>Seleccioná el servicio y la duración que mejor se adapte a vos.</p>
           </div>
 
-          <div class="process-card">
-            <span>03</span>
-            <h3>Enviá el comprobante</h3>
-            <p>
-              Después del pago te contactamos por WhatsApp.
-            </p>
+          <div class="step-card">
+            <span class="step-number">03</span>
+            <h3>Pagá</h3>
+            <p>Agregá el plan al carrito y completá el pago mediante Mercado Pago.</p>
           </div>
 
-          <div class="process-card">
-            <span>04</span>
-            <h3>Activamos tu servicio</h3>
-            <p>
-              Recibís las indicaciones para comenzar a utilizarlo.
-            </p>
+          <div class="step-card">
+            <span class="step-number">04</span>
+            <h3>Confirmá</h3>
+            <p>Después del pago, enviá el comprobante por WhatsApp.</p>
           </div>
 
         </div>
@@ -493,223 +665,64 @@
     </section>
 
 
-    <!-- ================= AVISO ================= -->
-
-    <section class="notice-section">
-
+    <!-- =========================
+         BENEFICIOS
+    ========================== -->
+    <section class="benefits-section" id="beneficios">
       <div class="container">
 
-        <div class="notice-card">
+        <div class="section-heading">
+          <span class="section-kicker">PERSONALNET</span>
+          <h2>¿Por qué elegirnos?</h2>
+          <p>Todo lo que necesitás para contratar tu servicio.</p>
+        </div>
 
-          <div class="notice-icon">!</div>
+        <div class="benefits-grid">
 
-          <div>
-            <h3>Importante</h3>
+          <article class="benefit-card">
+            <div class="benefit-icon">⚡</div>
+            <h3>Activación rápida</h3>
+            <p>Después de confirmar tu pago gestionamos tu servicio lo antes posible.</p>
+          </article>
 
-            <p>
-              Antes de comprar, asegurate de tener instalada la aplicación
-              correspondiente a tu servicio.
-            </p>
-          </div>
+          <article class="benefit-card">
+            <div class="benefit-icon">💬</div>
+            <h3>Soporte por WhatsApp</h3>
+            <p>Podés comunicarte con nosotros para recibir ayuda y soporte.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon">💳</div>
+            <h3>Mercado Pago</h3>
+            <p>Realizá tu pago de manera sencilla mediante Mercado Pago.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon">🇦🇷</div>
+            <h3>Para Argentina</h3>
+            <p>Servicios pensados para usuarios de Personal y Claro Argentina.</p>
+          </article>
 
         </div>
 
       </div>
-
     </section>
 
 
-    <!-- ================= CONTACTO ================= -->
-
-    <section class="contact-section">
-
+    <!-- =========================
+         INFORMACIÓN
+    ========================== -->
+    <section class="info-section">
       <div class="container">
 
-        <div class="contact-card">
+        <div class="info-card">
+
+          <div class="info-icon">!</div>
 
           <div>
-            <span class="section-kicker">¿NECESITÁS AYUDA?</span>
+            <span class="section-kicker">IMPORTANTE</span>
 
-            <h2>Estamos para ayudarte.</h2>
+            <h2>Probá antes de contratar</h2>
 
             <p>
-              Comunicate con nosotros por WhatsApp o Instagram.
-            </p>
-          </div>
-
-
-          <div class="contact-actions">
-
-            <a
-              href="https://wa.me/5493844546841"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-primary"
-            >
-              WhatsApp
-            </a>
-
-            <a
-              href="https://www.instagram.com/cergio.oficial__/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-secondary"
-            >
-              Instagram
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- ================= FOOTER ================= -->
-
-  <footer class="footer">
-
-    <div class="container footer-inner">
-
-      <div>
-        <strong>PERSONALNET</strong>
-        <span>Internet sin límites.</span>
-      </div>
-
-      <span>© 2026 PERSONALNET</span>
-
-    </div>
-
-  </footer>
-
-
-  <!-- ================= CART MODAL ================= -->
-
-  <div class="modal-overlay" id="cartOverlay">
-
-    <div class="cart-modal">
-
-      <div class="modal-header">
-
-        <div>
-          <span class="modal-kicker">TU PEDIDO</span>
-          <h2>Carrito</h2>
-        </div>
-
-        <button id="closeCart" class="modal-close">×</button>
-
-      </div>
-
-
-      <div id="cartItems" class="cart-items"></div>
-
-
-      <div id="emptyCart" class="empty-cart">
-        <span>🛒</span>
-        <h3>Tu carrito está vacío</h3>
-        <p>Agregá un plan para continuar.</p>
-      </div>
-
-
-      <div id="cartBottom" class="cart-bottom">
-
-        <div class="cart-total-row">
-          <span>Total</span>
-          <strong id="cartTotal">$0</strong>
-        </div>
-
-
-        <div class="customer-form">
-
-          <label for="customerName">
-            Nombre
-          </label>
-
-          <input
-            id="customerName"
-            type="text"
-            placeholder="Tu nombre"
-            autocomplete="name"
-          >
-
-
-          <label for="customerPhone">
-            WhatsApp
-          </label>
-
-          <input
-            id="customerPhone"
-            type="tel"
-            placeholder="Ej: 3844 123456"
-            autocomplete="tel"
-          >
-
-        </div>
-
-
-        <p id="cartError" class="cart-error"></p>
-
-
-        <button id="checkoutButton" class="checkout-button">
-          Pagar con Mercado Pago
-        </button>
-
-
-        <button id="clearCart" class="clear-cart">
-          Vaciar carrito
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- ================= AFTER PAYMENT ================= -->
-
-  <div class="modal-overlay" id="afterOverlay">
-
-    <div class="after-modal">
-
-      <button id="closeAfter" class="modal-close">×</button>
-
-      <div class="success-icon">✓</div>
-
-      <span class="modal-kicker">PEDIDO GENERADO</span>
-
-      <h2>¡Listo!</h2>
-
-      <p>
-        Cuando completes el pago, enviá el comprobante por WhatsApp
-        para que podamos activar tu servicio.
-      </p>
-
-
-      <a
-        id="sendWhatsApp"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn-primary whatsapp-button"
-      >
-        Enviar comprobante
-      </a>
-
-
-      <button id="closeAfterBottom" class="clear-cart">
-        Cerrar
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <script src="script.js"></script>
-
-</body>
-</html>
+     
