@@ -153,9 +153,4 @@ window.open(
 )
 };
 
-$("#goPlans").onclick=e=>{
-e.preventDefault();
-$("#planes").scrollIntoView({behavior:"smooth"});
-};
-
 render();
